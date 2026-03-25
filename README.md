@@ -87,11 +87,13 @@ pip install -r requirements.txt
 # go to the main directory where you run your local server
 cd autotime
 cd tt
-# Initialize database with sample data
-python insert_data.py
+
+# Initialize database with sample data 
+#step 1 and step 2 only run when db.sqlite3 is not get download due to github server serror or any fault
+ step 1 : python insert_data.py
 
 # Run migrations
-python manage.py migrate
+ step 2 : python manage.py migrate
 
 # Start the development server
 python manage.py runserver
