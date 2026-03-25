@@ -1,3 +1,5 @@
+## this is main file where  all the logic of timetable generation is implemented and all the reports are generated and stored in session to be displayed in output.html
+
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, FileResponse
 from . import pool
