@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEMPOSYNK | Generated Timetable - Intelligent Timetable Synchronization System</title>
+    <link rel="shortcut icon" type="image/png" href="https://image.ibb.co/fOur3b/favicon.png"/>
+    <meta name="theme-color" content="#000000">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000000;
+            color: #ffffff;
+            overflow-x: auto;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ff0000;
+            border-radius: 3px;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 60px;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            border-bottom: 1px solid rgba(255, 0, 0, 0.2);
+        }
+
+        .header.scrolled {
+            padding: 12px 60px;
+            background: rgba(0, 0, 0, 0.95);
+        }
+
+        .header__logo {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .header__img {
+            width: 42px;
+            height: 42px;
+            transition: transform 0.3s ease;
+            filter: brightness(0) invert(1);
+        }
+
+        .brand-text {
+            display: inline-block;
+            margin-left: 12px;
+            vertical-align: middle;
+        }
+
+        .brand-text h4 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #fff, #ff0000);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-text p {
+            font-size: 8px;
+            margin: 0;
+            color: #888;
+            letter-spacing: 1px;
+        }
+
+        .header__menu {
+            float: right;
+            margin-top: 8px;
+        }
+
+        .header__el {
+            display: inline-block;
+            margin-left: 35px;
+        }
+
+        .header__link {
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .header__link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #ff0000;
+            transition: width 0.3s ease;
+        }
+
+        .header__link:hover::after {
+            width: 100%;
+        }
+
+        .header__link:hover {
+            color: #ff0000;
+        }
+
+        .main-content {
+            position: relative;
+            z-index: 1;
+            padding-top: 100px;
+            padding-bottom: 50px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            margin-bottom: 20px;
+            border-left: 3px solid #ff0000;
+            background: rgba(255, 0, 0, 0.05);
+        }
+
+        .badge span {
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            color: #ff0000;
+            text-transform: uppercase;
+        }
+
+        .page-header h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .page-header h1 .highlight {
+            color: #ff0000;
+        }
+
+        .page-header p {
+            color: #888;
+            font-size: 16px;
+        }
+
+        .action-bar {
+            background: rgba(10, 10, 10, 0.8);
+            border-radius: 20px;
+            padding: 20px 30px;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .action-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+        }
+
+        .btn-primary {
+            background: #ff0000;
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background: #cc0000;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+            color: #ffffff;
+        }
+
+        .btn-outline:hover {
+            border-color: #ff0000;
+            color: #ff0000;
+        }
+
+        .replacement-form {
+            display: inline-flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .replacement-form input {
+            padding: 10px 16px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 40px;
+            color: #ffffff;
+            font-size: 13px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .replacement-form input:focus {
+            outline: none;
+            border-color: #ff0000;
+        }
+
+        .timetable-section {
+            margin-bottom: 50px;
+        }
+
+        .timetable-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255, 0, 0, 0.3);
+        }
+
+        .timetable-container {
+            overflow-x: auto;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        th {
+            background: rgba(255, 0, 0, 0.1);
+            padding: 14px 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
+            color: #ff0000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 13px;
+        }
+
+        .time-col {
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.03);
+            color: #ff0000;
+        }
+
+        .lunch-cell {
+            background: rgba(255, 0, 0, 0.1);
+            color: #ff8888;
+            font-weight: 500;
+        }
+
+        .free-cell {
+            color: #666;
+            font-style: italic;
+        }
+
+        .course-code {
+            font-weight: 700;
+            color: #ff6666;
+            display: block;
+            font-size: 13px;
+        }
+
+        .course-name {
+            font-size: 11px;
+            color: #aaa;
+            display: block;
+            margin-top: 3px;
+        }
+
+        .prof-name {
+            font-size: 10px;
+            color: #888;
+            display: block;
+            margin-top: 4px;
+        }
+
+        .faculty-needed {
+            font-size: 10px;
+            color: #ff8888;
+            display: block;
+            margin-top: 4px;
+        }
+
+        .report-section {
+            background: rgba(10, 10, 10, 0.6);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .report-header h3 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .report-header h3 i {
+            color: #ff0000;
+            margin-right: 10px;
+        }
+
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .report-table th {
+            background: rgba(255, 0, 0, 0.05);
+            padding: 12px;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        .report-table td {
+            padding: 10px 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .report-table tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .capacity-badge {
+            background: rgba(255, 0, 0, 0.1);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            display: inline-block;
+            margin: 2px 0;
+        }
+
+        .summary-card {
+            background: rgba(255, 0, 0, 0.05);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 0, 0, 0.1);
+        }
+
+        .progress-bar {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            height: 6px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: #ff0000;
+            border-radius: 10px;
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(10, 10, 10, 0.6);
+            border-radius: 20px;
+        }
+
+        .no-data i {
+            font-size: 60px;
+            color: #ff0000;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .no-data h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .no-data p {
+            color: #888;
+            margin-bottom: 25px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-content {
+            background: rgba(10, 10, 10, 0.95);
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 500px;
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            animation: fadeInUp 0.4s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-header h2 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .modal-header p {
+            color: #888;
+            font-size: 13px;
+        }
+
+        .modal-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 0, 0, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+        }
+
+        .modal-icon i {
+            font-size: 28px;
+            color: #ff0000;
+        }
+
+        .modal-form-group {
+            margin-bottom: 20px;
+        }
+
+        .modal-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #ccc;
+        }
+
+        .modal-form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .modal-form-group input:focus {
+            outline: none;
+            border-color: #ff0000;
+        }
+
+        .logo-preview {
+            width: 80px;
+            height: 80px;
+            margin: 10px auto;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid rgba(255, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .logo-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-confirm {
+            background: #ff0000;
+            color: white;
+        }
+
+        .btn-confirm:hover {
+            background: #cc0000;
+            transform: translateY(-2px);
+        }
+
+        .btn-cancel {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+            .header__menu {
+                float: none;
+                text-align: center;
+                margin-top: 12px;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .header__el {
+                margin: 5px 12px;
+            }
+            .main-content {
+                padding-top: 160px;
+            }
+            .container {
+                padding: 0 20px;
+            }
+            .page-header h1 {
+                font-size: 28px;
+            }
+            .action-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .replacement-form {
+                width: 100%;
+            }
+            .replacement-form input {
+                flex: 1;
+            }
+            .modal-content {
+                margin: 20% auto;
+                padding: 20px;
+            }
+        }
+    </style>
+    
+    <!-- Download-specific styles that won't affect the main page -->
+    <style id="download-styles">
+        /* These styles are copied for download generation */
+        .download-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            border-bottom: 2px solid #ff0000;
+        }
+        .download-logo {
+            max-width: 40px;
+            height: auto;
+            margin: 0 auto 15px;
+            display: block;
+        }
+        .download-college-name {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ff0000;
+            margin: 10px 0;
+        }
+        .download-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #ffffff;
+            margin: 10px 0;
+        }
+        .download-meta {
+            font-size: 12px;
+            color: #888;
+            margin-top: 15px;
+        }
+        .download-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 12px;
+        }
+        .download-table th {
+            background: #ff0000;
+            color: white;
+            padding: 10px;
+            border: 1px solid #333;
+        }
+        .download-table td {
+            padding: 8px;
+            border: 1px solid #333;
+            text-align: center;
+        }
+        .download-table .time-col {
+            background: #f5f5f5;
+            font-weight: bold;
+        }
+        .download-footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 10px;
+            color: #666;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+
+<header class="header" id="header">
+    <div class="header__container">
+        <div class="header__logo">
+            <img class="header__img" src="https://image.ibb.co/kcVou6/path3000.png" alt="TEMPOSYNK">
+            <div class="brand-text">
+                <h4>TEMPOSYNK</h4>
+                <p>INTELLIGENT TIMETABLE</p>
+            </div>
+        </div>
+        <div class="header__menu">
+            <div class="header__el">
+                <a href="/timetable" class="header__link">GET STARTED</a>
+            </div>
+            <div class="header__el">
+                <a href="/program" class="header__link">ADD PROGRAM</a>
+            </div>
+            <div class="header__el">
+                <a href="/faculty" class="header__link">ADD FACULTY</a>
+            </div>
+            <div class="header__el">
+                <a href="/subject" class="header__link">ADD COURSES</a>
+            </div>
+            <div class="header__el">
+                <a href="/lecture" class="header__link">ADD LECTURE</a>
+            </div>
+            <div class="header__el">
+                <a href="/lab" class="header__link">ADD LAB</a>
+            </div>
+            <div class="header__el">
+                <a href="/generate" class="header__link">GENERATE</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="main-content">
+    <div class="container">
+        <div class="page-header">
+            <div class="badge">
+                <span>GENERATED TIMETABLE</span>
+            </div>
+            <h1>Your <span class="highlight">Optimized Schedule</span></h1>
+            <p>Conflict-free timetables generated by TEMPOSYNK algorithm</p>
+        </div>
+
+        {% if schedules and schedules|length > 0 %}
+        <!-- Action Bar -->
+        <div class="action-bar">
+            <div class="action-group">
+                <button type="button" class="btn btn-primary" onclick="openDownloadModal('pdf')">
+                    <i class="fas fa-file-pdf"></i> PDF
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="openDownloadModal('excel')">
+                    <i class="fas fa-file-excel"></i> Excel
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="openDownloadModal('word')">
+                    <i class="fas fa-file-word"></i> Word
+                </button>
+                <button type="button" class="btn btn-outline" onclick="openDownloadModal('csv')">
+                    <i class="fas fa-file-csv"></i> CSV
+                </button>
+            </div>
+
+            <div class="action-group">
+                <form method="post" action="/generatepage/" style="display: inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="program" value="{{ request.session.last_program }}">
+                    <input type="hidden" name="semester" value="{{ request.session.last_semester }}">
+                    <input type="hidden" name="batches" value="{{ request.session.last_batches }}">
+                    <input type="hidden" name="lecture_halls" value="{{ request.session.last_lecture_halls }}">
+                    <button type="submit" class="btn btn-outline">
+                        <i class="fas fa-sync-alt"></i> Regenerate
+                    </button>
+                </form>
+
+                <form method="post" action="/replace_professor/" class="replacement-form">
+                    {% csrf_token %}
+                    <input type="text" name="absent_prof" placeholder="Absent Professor ID">
+                    <input type="text" name="replacement_prof" placeholder="Replacement ID (optional)">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-exchange-alt"></i> Replace
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Download Modal -->
+        <div id="downloadModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-icon">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <h2>Download Timetable</h2>
+                    <p>Please enter your details to customize the download</p>
+                </div>
+                <form id="downloadForm" method="post" action="/download_timetable/">
+                    {% csrf_token %}
+                    <input type="hidden" name="html" id="dl_html">
+                    <input type="hidden" name="format" id="dl_format">
+                    <input type="hidden" name="person_name" id="person_name_input">
+                    <input type="hidden" name="college_name" id="college_name_input">
+                    <input type="hidden" name="logo_data" id="logo_data_input">
+                    
+                    <div class="modal-form-group">
+                        <label>Your Name *</label>
+                        <input type="text" id="person_name" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="modal-form-group">
+                        <label>College/Institution Name *</label>
+                        <input type="text" id="college_name" placeholder="Enter college name" required>
+                    </div>
+                    <div class="modal-form-group">
+                        <label>College Logo (Optional)</label>
+                        <input type="file" id="logo_upload" accept="image/*">
+                        <div class="logo-preview" id="logo_preview">
+                            <i class="fas fa-image" style="color:#666;"></i>
+                        </div>
+                        <small style="color:#666;">Upload your college logo to appear on the document (Max 80x80px)</small>
+                    </div>
+                    <div class="modal-buttons">
+                        <button type="button" class="btn-cancel" onclick="closeDownloadModal()">Cancel</button>
+                        <button type="button" class="btn-confirm" onclick="submitDownload()">Download</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Timetables -->
+        {% for prog, data in schedules.items %}
+            {% if data.matrix and data.matrix|length > 0 %}
+            <div class="timetable-section" id="timetable-{{ forloop.counter }}">
+                <h3 class="timetable-title">
+                    <i class="fas fa-calendar-week" style="color:#ff0000; margin-right:10px;"></i>
+                    {{ prog }}
+                </h3>
+                <div class="timetable-container">
+                    <table class="timetable-table">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Monday</th>
+                                <th>Tuesday</th>
+                                <th>Wednesday</th>
+                                <th>Thursday</th>
+                                <th>Friday</th>
+                            </thead>
+                        <tbody>
+                            {% for row in data.matrix %}
+                            <tr>
+                                <td class="time-col">{{ row.time }}</td>
+                                {% for cell in row.cells %}
+                                <td>
+                                    {% if cell.type == 'lunch' %}
+                                        <span class="lunch-cell">🍽️ LUNCH BREAK</span>
+                                    {% elif cell.type == 'free' %}
+                                        <span class="free-cell">— Free —</span>
+                                    {% elif cell.type == 'course' %}
+                                        <span class="course-code">{{ cell.course }}</span>
+                                        {% if cell.course_name %}
+                                            <span class="course-name">{{ cell.course_name }}</span>
+                                        {% endif %}
+                                        {% if cell.professor %}
+                                            <span class="prof-name"><i class="fas fa-user"></i> {{ cell.professor }}</span>
+                                        {% endif %}
+                                    {% elif cell.type == 'lab_needed' %}
+                                        <span class="course-code">{{ cell.course }}</span>
+                                        {% if cell.course_name %}
+                                            <span class="course-name">{{ cell.course_name }}</span>
+                                        {% endif %}
+                                        <span class="faculty-needed"><i class="fas fa-flask"></i> Lab Faculty Needed</span>
+                                    {% elif cell.type == 'faculty_needed' %}
+                                        <span class="course-code">{{ cell.course }}</span>
+                                        {% if cell.course_name %}
+                                            <span class="course-name">{{ cell.course_name }}</span>
+                                        {% endif %}
+                                        <span class="faculty-needed"><i class="fas fa-chalkboard-user"></i> Faculty Needed</span>
+                                    {% else %}
+                                        <span class="course-code">{{ cell.course }}</span>
+                                    {% endif %}
+                                </td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endif %}
+        {% endfor %}
+
+        <!-- Faculty Workload Report -->
+        {% if faculty_report and faculty_report|length > 0 %}
+        <div class="report-section" id="faculty-report-section">
+            <div class="report-header">
+                <h3><i class="fas fa-chalkboard-user"></i> Faculty Workload Report</h3>
+                <div class="action-group">
+                    <form method="post" action="/download_faculty_report/">
+                        {% csrf_token %}
+                        <input type="hidden" name="format" value="pdf">
+                        <button type="submit" class="btn btn-outline"><i class="fas fa-file-pdf"></i> PDF</button>
+                    </form>
+                    <form method="post" action="/download_faculty_report/">
+                        {% csrf_token %}
+                        <input type="hidden" name="format" value="excel">
+                        <button type="submit" class="btn btn-outline"><i class="fas fa-file-excel"></i> Excel</button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Summary Stats -->
+            <div id="faculty-summary-stats" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 25px;">
+                <div class="summary-card">
+                    <i class="fas fa-users" style="font-size: 24px; color: #ff0000;"></i>
+                    <h3 id="total-faculty" style="margin-top: 8px;">0</h3>
+                    <p style="font-size: 11px; color: #888;">Total Faculty</p>
+                </div>
+                <div class="summary-card">
+                    <i class="fas fa-clock" style="font-size: 24px; color: #ff0000;"></i>
+                    <h3 id="total-hours" style="margin-top: 8px;">0</h3>
+                    <p style="font-size: 11px; color: #888;">Total Weekly Hours</p>
+                </div>
+                <div class="summary-card">
+                    <i class="fas fa-chart-line" style="font-size: 24px; color: #ff0000;"></i>
+                    <h3 id="avg-utilization" style="margin-top: 8px;">0%</h3>
+                    <p style="font-size: 11px; color: #888;">Avg Utilization</p>
+                </div>
+                <div class="summary-card">
+                    <i class="fas fa-flask" style="font-size: 24px; color: #ff0000;"></i>
+                    <h3 id="total-labs" style="margin-top: 8px;">0</h3>
+                    <p style="font-size: 11px; color: #888;">Total Lab Sessions</p>
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <table class="report-table" id="faculty-report-table">
+                    <thead>
+                        <tr>
+                            <th>Faculty ID</th>
+                            <th>Faculty Name</th>
+                            <th>Weekly Hours</th>
+                            <th>Utilization</th>
+                            <th>Lectures</th>
+                            <th>Labs</th>
+                            <th>Courses Taught</th>
+                            <th>Daily Distribution</th>
+                        </thead>
+                    <tbody>
+                        {% for faculty in faculty_report %}
+                        <tr>
+                            <td><strong>{{ faculty.id }}</strong></td>
+                            <td>{{ faculty.name }}</td>
+                            <td class="weekly-hours-cell">
+                                <span class="capacity-badge">{{ faculty.weekly_hours }} hrs</span>
+                                {% if faculty.free_slots > 0 %}
+                                <small style="color:#88ff88; display:block;">({{ faculty.free_slots }} free)</small>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" data-utilization="{{ faculty.utilization_percentage }}" style="width: {{ faculty.utilization_percentage }}%;"></div>
+                                    </div>
+                                    <span class="utilization-value" style="font-size: 12px;">{{ faculty.utilization_percentage }}%</span>
+                                </div>
+                            </td>
+                            <td class="lectures-cell">{{ faculty.lectures_handled }}</td>
+                            <td class="labs-cell">{{ faculty.labs_handled }}</td>
+                            <td>
+                                {% for course_code, course_data in faculty.courses.items %}
+                                    <div style="margin-bottom: 5px;">
+                                        <strong>{{ course_code }}</strong><br>
+                                        <small style="color:#888;">{{ course_data.name }}</small><br>
+                                        <small style="color:#ff8888;">{{ course_data.hours }} hrs ({{ course_data.type }})</small>
+                                    </div>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% for day, hours in faculty.days.items %}
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
+                                        <span>{{ day|slice:":3" }}:</span>
+                                        <span style="color:#ff8888;">{{ hours }} hrs</span>
+                                    </div>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Lab Utilization Report -->
+        {% if lab_report and lab_report|length > 0 %}
+        <div class="report-section" id="lab-report-section">
+            <div class="report-header">
+                <h3><i class="fas fa-flask"></i> Lab Utilization Report</h3>
+                <div class="action-group">
+                    <form method="post" action="/download_lab_report/">
+                        {% csrf_token %}
+                        <input type="hidden" name="format" value="pdf">
+                        <button type="submit" class="btn btn-outline"><i class="fas fa-file-pdf"></i> PDF</button>
+                    </form>
+                    <form method="post" action="/download_lab_report/">
+                        {% csrf_token %}
+                        <input type="hidden" name="format" value="excel">
+                        <button type="submit" class="btn btn-outline"><i class="fas fa-file-excel"></i> Excel</button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Summary Stats for Labs -->
+            <div id="lab-summary-stats" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px;">
+                <div class="summary-card">
+                    <i class="fas fa-flask" style="font-size: 24px; color: #ff0000;"></i>
+                    <h3 id="total-labs-count" style="margin-top: 8px;">0</h3>
+                    <p style="font-size: 11px; color: #888;">Total Labs/Courses</p>
+                </div>
+                <div class="summary-card">
+                    <i class="fas fa-clock" style="font-size: 24px; color: #ff0000;"></i>
+                    <h3 id="total-lab-hours" style="margin-top: 8px;">0</h3>
+                    <p style="font-size: 11px; color: #888;">Total Lab Hours</p>
+                </div>
+                <div class="summary-card">
+                    <i class="fas fa-chart-line" style="font-size: 24px; color: #ff0000;"></i>
+                    <h3 id="avg-lab-utilization" style="margin-top: 8px;">0%</h3>
+                    <p style="font-size: 11px; color: #888;">Avg Utilization</p>
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <table class="report-table" id="lab-report-table">
+                    <thead>
+                        <tr>
+                            <th>Lab/Course Code</th>
+                            <th>Course Name</th>
+                            <th class="lab-hours-col">Total Hours</th>
+                            <th>Sessions</th>
+                            <th class="lab-utilization-col">Utilization</th>
+                            <th>Days Used</th>
+                            <th>Schedule</th>
+                        </thead>
+                    <tbody>
+                        {% for lab in lab_report %}
+                        <tr>
+                            <td><strong>{{ lab.lab_code }}</strong></td>
+                            <td>{{ lab.lab_name }}</td>
+                            <td class="lab-hours-value">{{ lab.total_hours }} hrs</td>
+                            <td>{{ lab.sessions }}</td>
+                            <td class="lab-utilization-value">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" data-lab-utilization="{{ lab.utilization_percentage }}" style="width: {{ lab.utilization_percentage }}%;"></div>
+                                    </div>
+                                    <span style="font-size: 12px;">{{ lab.utilization_percentage }}%</span>
+                                </div>
+                            </td>
+                            <td>
+                                {% for day in lab.days_used %}
+                                    <span class="capacity-badge" style="margin: 2px;">{{ day|slice:":3" }}</span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% for slot in lab.time_slots|slice:":3" %}
+                                    <div style="font-size: 11px;">{{ slot }}</div>
+                                {% endfor %}
+                                {% if lab.time_slots|length > 3 %}
+                                    <small style="color:#888;">+{{ lab.time_slots|length|add:"-3" }} more</small>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+
+        {% else %}
+        <!-- No Data Message -->
+        <div class="no-data">
+            <i class="fas fa-calendar-times"></i>
+            <h3>No Timetable Generated Yet</h3>
+            <p>Please go to the Generate page to create a new timetable.</p>
+            <a href="/generate" class="btn btn-primary">
+                <i class="fas fa-cogs"></i> Generate Timetable
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    let currentFormat = '';
+    let selectedLogo = null;
+
+    window.addEventListener('scroll', function() {
+        const header = document.getElementById('header');
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+
+    function openDownloadModal(format) {
+        currentFormat = format;
+        document.getElementById('downloadModal').style.display = 'block';
+        document.getElementById('person_name').value = '';
+        document.getElementById('college_name').value = '';
+        document.getElementById('logo_upload').value = '';
+        document.getElementById('logo_preview').innerHTML = '<i class="fas fa-image" style="color:#666;"></i>';
+        selectedLogo = null;
+    }
+
+    function closeDownloadModal() {
+        document.getElementById('downloadModal').style.display = 'none';
+    }
+
+    function handleLogoUpload(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                selectedLogo = e.target.result;
+                document.getElementById('logo_preview').innerHTML = `<img src="${selectedLogo}" style="max-width:100%; max-height:100%; object-fit:contain;">`;
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function generateProfessionalHTML() {
+        const personName = document.getElementById('person_name').value.trim();
+        const collegeName = document.getElementById('college_name').value.trim();
+        const currentDate = new Date().toLocaleString();
+        
+        let html = `<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>TEMPOSYNK - Generated Timetable</title>
+            <style>
+                * {
+                    margin: 0;
+                    padding: 0;
+                    box-sizing: border-box;
+                }
+                body {
+                    font-family: 'Segoe UI', 'Inter', Arial, sans-serif;
+                    margin: 0;
+                    padding: 40px;
+                    background: #ffffff;
+                    color: #333333;
+                    line-height: 1.5;
+                }
+                .document-container {
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    background: white;
+                }
+                .header-section {
+                    text-align: center;
+                    margin-bottom: 40px;
+                    padding-bottom: 20px;
+                    border-bottom: 2px solid #ff0000;
+                }
+                .logo-container {
+                    margin-bottom: 15px;
+                }
+                .logo-image {
+                    max-width: 40px;
+                    max-height: 40px;
+                    width: auto;
+                    height: auto;
+                    object-fit: contain;
+                }
+                .college-name {
+                    font-size: 28px;
+                    font-weight: 700;
+                    color: #ff0000;
+                    margin: 10px 0 5px;
+                }
+                .document-title {
+                    font-size: 24px;
+                    font-weight: 600;
+                    color: #333;
+                    margin: 10px 0;
+                }
+                .meta-info {
+                    font-size: 12px;
+                    color: #666;
+                    margin-top: 15px;
+                }
+                .timetable-section {
+                    margin-bottom: 40px;
+                }
+                .section-title {
+                    font-size: 20px;
+                    font-weight: 600;
+                    margin: 25px 0 15px;
+                    padding-bottom: 8px;
+                    border-bottom: 2px solid #ff0000;
+                    color: #ff0000;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin: 15px 0;
+                    font-size: 12px;
+                }
+                th {
+                    background: #ff0000;
+                    color: white;
+                    padding: 10px;
+                    border: 1px solid #ddd;
+                    font-weight: 600;
+                }
+                td {
+                    padding: 8px;
+                    border: 1px solid #ddd;
+                    text-align: center;
+                }
+                .time-col {
+                    background: #f9f9f9;
+                    font-weight: 600;
+                }
+                .lunch-cell {
+                    background: #fff3cd;
+                    color: #856404;
+                }
+                .free-cell {
+                    color: #999;
+                    font-style: italic;
+                }
+                .course-code {
+                    font-weight: 700;
+                    color: #ff0000;
+                }
+                .course-name {
+                    font-size: 10px;
+                    color: #666;
+                }
+                .prof-name {
+                    font-size: 9px;
+                    color: #888;
+                }
+                .report-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    font-size: 11px;
+                }
+                .report-table th {
+                    background: #ff0000;
+                    color: white;
+                    padding: 8px;
+                    text-align: left;
+                }
+                .report-table td {
+                    padding: 8px;
+                    text-align: left;
+                    vertical-align: top;
+                }
+                .capacity-badge {
+                    background: #f0f0f0;
+                    padding: 2px 6px;
+                    border-radius: 4px;
+                    font-size: 10px;
+                }
+                .footer {
+                    margin-top: 40px;
+                    text-align: center;
+                    font-size: 10px;
+                    color: #999;
+                    padding-top: 20px;
+                    border-top: 1px solid #eee;
+                }
+                @media print {
+                    body {
+                        padding: 20px;
+                    }
+                    .no-print {
+                        display: none;
+                    }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="document-container">
+                <div class="header-section">`;
+        
+        // Add logo if uploaded
+        if (selectedLogo) {
+            html += `
+                    <div class="logo-container">
+                        <img src="${selectedLogo}" class="logo-image" alt="College Logo">
+                    </div>`;
+        }
+        
+        html += `
+                    <div class="college-name">${escapeHtml(collegeName)}</div>
+                    <div class="document-title">TEMPOSYNK - Generated Timetable</div>
+                    <div class="meta-info">
+                        <strong>Generated for:</strong> ${escapeHtml(personName)}<br>
+                        <strong>Generated on:</strong> ${currentDate}
+                    </div>
+                </div>`;
+        
+        // Add timetables
+        const timetableSections = document.querySelectorAll('.timetable-section');
+        timetableSections.forEach((section, index) => {
+            const title = section.querySelector('.timetable-title')?.innerText || `Timetable ${index + 1}`;
+            const table = section.querySelector('table');
+            if (table) {
+                html += `
+                <div class="timetable-section">
+                    <div class="section-title">${escapeHtml(title)}</div>
+                    ${table.outerHTML}
+                </div>`;
+            }
+        });
+        
+        // Add faculty report if exists
+        const facultyReport = document.getElementById('faculty-report-section');
+        if (facultyReport) {
+            const facultyTitle = facultyReport.querySelector('.report-header h3')?.innerText || 'Faculty Workload Report';
+            const facultyTable = facultyReport.querySelector('#faculty-report-table');
+            if (facultyTable) {
+                html += `
+                <div class="timetable-section">
+                    <div class="section-title">${escapeHtml(facultyTitle)}</div>
+                    ${facultyTable.outerHTML}
+                </div>`;
+            }
+        }
+        
+        // Add lab report if exists
+        const labReport = document.getElementById('lab-report-section');
+        if (labReport) {
+            const labTitle = labReport.querySelector('.report-header h3')?.innerText || 'Lab Utilization Report';
+            const labTable = labReport.querySelector('#lab-report-table');
+            if (labTable) {
+                html += `
+                <div class="timetable-section">
+                    <div class="section-title">${escapeHtml(labTitle)}</div>
+                    ${labTable.outerHTML}
+                </div>`;
+            }
+        }
+        
+        html += `
+                <div class="footer">
+                    <p>© ${new Date().getFullYear()} TEMPOSYNK - Intelligent Timetable Synchronization System</p>
+                    <p>Generated by TEMPOSYNK Algorithm | All rights reserved</p>
+                </div>
+            </div>
+        </body>
+        </html>`;
+        
+        return html;
+    }
+    
+    function escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+    
+    function generateCSV() {
+        const personName = document.getElementById('person_name').value.trim();
+        const collegeName = document.getElementById('college_name').value.trim();
+        
+        let csv = `"${collegeName}","TEMPOSYNK Generated Timetable"\n`;
+        csv += `"Generated for:","${personName}"\n`;
+        csv += `"Generated on:","${new Date().toLocaleString()}"\n\n`;
+        
+        // Add timetables
+        const timetableSections = document.querySelectorAll('.timetable-section');
+        timetableSections.forEach((section) => {
+            const title = section.querySelector('.timetable-title')?.innerText || 'Timetable';
+            csv += `"${title}"\n`;
+            
+            const table = section.querySelector('table');
+            if (table) {
+                const rows = table.querySelectorAll('tr');
+                rows.forEach(row => {
+                    const cells = row.querySelectorAll('th, td');
+                    const rowData = Array.from(cells).map(cell => {
+                        let text = cell.innerText.trim().replace(/\n/g, ' ');
+                        return `"${text.replace(/"/g, '""')}"`;
+                    });
+                    csv += rowData.join(',') + '\n';
+                });
+                csv += '\n';
+            }
+        });
+        
+        return csv;
+    }
+    
+    function submitDownload() {
+        const personName = document.getElementById('person_name').value.trim();
+        const collegeName = document.getElementById('college_name').value.trim();
+        
+        if (!personName || !collegeName) {
+            alert('Please enter your name and college name');
+            return;
+        }
+        
+        let html = generateProfessionalHTML();
+        let csv = generateCSV();
+        
+        document.getElementById('dl_html').value = html;
+        document.getElementById('dl_format').value = currentFormat;
+        document.getElementById('person_name_input').value = personName;
+        document.getElementById('college_name_input').value = collegeName;
+        if (selectedLogo) {
+            document.getElementById('logo_data_input').value = selectedLogo;
+        }
+        
+        // For CSV format, handle separately
+        if (currentFormat === 'csv') {
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `timetable_${personName.replace(/\s/g, '_')}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            closeDownloadModal();
+        } else {
+            document.getElementById('downloadForm').submit();
+        }
+        
+        closeDownloadModal();
+    }
+    
+    // Calculate faculty summary totals from table data
+    function calculateFacultySummary() {
+        const facultyRows = document.querySelectorAll('#faculty-report-table tbody tr');
+        let totalHours = 0;
+        let totalUtilization = 0;
+        let totalLabs = 0;
+        let facultyCount = facultyRows.length;
+        
+        facultyRows.forEach(row => {
+            const hoursCell = row.querySelector('.weekly-hours-cell');
+            if (hoursCell) {
+                const hoursText = hoursCell.innerText;
+                const hoursMatch = hoursText.match(/(\d+)/);
+                if (hoursMatch) totalHours += parseInt(hoursMatch[1]);
+            }
+            
+            const labsCell = row.querySelector('.labs-cell');
+            if (labsCell) {
+                const labsText = labsCell.innerText;
+                const labsMatch = labsText.match(/(\d+)/);
+                if (labsMatch) totalLabs += parseInt(labsMatch[1]);
+            }
+            
+            const utilCell = row.querySelector('.utilization-value');
+            if (utilCell) {
+                const utilText = utilCell.innerText;
+                const utilMatch = utilText.match(/(\d+\.?\d*)/);
+                if (utilMatch) totalUtilization += parseFloat(utilMatch[1]);
+            }
+        });
+        
+        const avgUtilization = facultyCount > 0 ? (totalUtilization / facultyCount).toFixed(1) : 0;
+        
+        document.getElementById('total-faculty').innerText = facultyCount;
+        document.getElementById('total-hours').innerText = totalHours;
+        document.getElementById('avg-utilization').innerText = avgUtilization + '%';
+        document.getElementById('total-labs').innerText = totalLabs;
+    }
+    
+    // Calculate lab summary totals
+    function calculateLabSummary() {
+        const labRows = document.querySelectorAll('#lab-report-table tbody tr');
+        let totalHours = 0;
+        let totalUtilization = 0;
+        let labCount = labRows.length;
+        
+        labRows.forEach(row => {
+            const hoursCell = row.querySelector('.lab-hours-value');
+            if (hoursCell) {
+                const hoursText = hoursCell.innerText;
+                const hoursMatch = hoursText.match(/(\d+)/);
+                if (hoursMatch) totalHours += parseInt(hoursMatch[1]);
+            }
+            
+            const utilCell = row.querySelector('.lab-utilization-value');
+            if (utilCell) {
+                const utilText = utilCell.innerText;
+                const utilMatch = utilText.match(/(\d+\.?\d*)/);
+                if (utilMatch) totalUtilization += parseFloat(utilMatch[1]);
+            }
+        });
+        
+        const avgUtilization = labCount > 0 ? (totalUtilization / labCount).toFixed(1) : 0;
+        
+        document.getElementById('total-labs-count').innerText = labCount;
+        document.getElementById('total-lab-hours').innerText = totalHours;
+        document.getElementById('avg-lab-utilization').innerText = avgUtilization + '%';
+    }
+    
+    // Run calculations when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        calculateFacultySummary();
+        calculateLabSummary();
+    });
+    
+    document.getElementById('logo_upload').addEventListener('change', handleLogoUpload);
+    
+    window.onclick = function(event) {
+        const modal = document.getElementById('downloadModal');
+        if (event.target == modal) {
+            closeDownloadModal();
+        }
+    }
+</script>
+
+</body>
+</html>

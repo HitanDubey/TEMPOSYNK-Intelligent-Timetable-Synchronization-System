@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>TEMPOSYNK | Intelligent Timetable Synchronization System</title>
+    <link rel="shortcut icon" type="image/png" href=""/>
+    <meta name="theme-color" content="#000000">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000000;
+            color: #ffffff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Canvas for 3D Background */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #111;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #ff0000;
+            border-radius: 3px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 60px;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            border-bottom: 1px solid rgba(255, 0, 0, 0.2);
+        }
+
+        .header.scrolled {
+            padding: 12px 60px;
+            background: rgba(0, 0, 0, 0.95);
+        }
+
+        .header__logo {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .header__img {
+            width: 42px;
+            height: 42px;
+            transition: transform 0.3s ease;
+            filter: brightness(0) invert(1);
+        }
+
+        .brand-text {
+            display: inline-block;
+            margin-left: 12px;
+            vertical-align: middle;
+        }
+
+        .brand-text h4 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #fff, #ff0000);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-text p {
+            font-size: 8px;
+            margin: 0;
+            color: #888;
+            letter-spacing: 1px;
+        }
+
+        .header__menu {
+            float: right;
+            margin-top: 8px;
+        }
+
+        .header__el {
+            display: inline-block;
+            margin-left: 35px;
+        }
+
+        .header__link {
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .header__link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #ff0000;
+            transition: width 0.3s ease;
+        }
+
+        .header__link:hover::after {
+            width: 100%;
+        }
+
+        .header__link:hover {
+            color: #ff0000;
+        }
+
+        .btn--white {
+            background: transparent;
+            padding: 8px 24px;
+            border-radius: 30px;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 12px;
+            border: 1.5px solid rgba(255, 0, 0, 0.5);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn--white:hover {
+            background: #ff0000;
+            border-color: #ff0000;
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .main-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 60px 80px;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-left {
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            margin-bottom: 24px;
+            border-left: 3px solid #ff0000;
+            background: rgba(255, 0, 0, 0.05);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { border-left-color: #ff0000; }
+            50% { border-left-color: #ffffff; }
+        }
+
+        .badge span {
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            color: #ff0000;
+            text-transform: uppercase;
+        }
+
+        .hero-title {
+            font-size: 64px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.1;
+            letter-spacing: -1px;
+        }
+
+        .hero-title .highlight {
+            color: #ff0000;
+            display: block;
+            font-size: 68px;
+        }
+
+        .hero-subtitle {
+            font-size: 16px;
+            color: #888;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            max-width: 500px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: #ff0000;
+            padding: 14px 36px;
+            border-radius: 40px;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background: #cc0000;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            padding: 14px 36px;
+            border-radius: 40px;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-outline:hover {
+            border-color: #ff0000;
+            color: #ff0000;
+            transform: translateY(-2px);
+        }
+
+        /* Video Container - REPLACES THE CAT ANIMATION */
+        /* Video Container - NO BORDER, NO GLOW */
+.video-container {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    border-radius: 20px;
+    overflow: hidden;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    animation: floatVideo 3s ease-in-out infinite;
+}
+
+@keyframes floatVideo {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+.hero-video {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+
+/* HOLOGRAM OVERLAY - KEEP REDISH EFFECT */
+.video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255,0,0,0.2), rgba(0,0,0,0.3));
+    pointer-events: none;
+    border-radius: 20px;
+    mix-blend-mode: overlay;
+}
+
+        /* Features Section */
+        .features {
+            padding: 100px 60px;
+            background: rgba(5, 5, 5, 0.9);
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 70px;
+        }
+
+        .section-title h2 {
+            font-size: 44px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .section-title .red-line {
+            width: 60px;
+            height: 3px;
+            background: #ff0000;
+            margin: 20px auto 0;
+            animation: expandWidth 1s ease-out;
+        }
+
+        @keyframes expandWidth {
+            from { width: 0; }
+            to { width: 60px; }
+        }
+
+        .section-title p {
+            font-size: 16px;
+            color: #888;
+            max-width: 600px;
+            margin: 20px auto 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 35px 25px;
+            border-radius: 20px;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: #ff0000;
+            transition: width 0.4s ease;
+        }
+
+        .feature-card:hover::before {
+            width: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255, 0, 0, 0.3);
+            background: rgba(20, 20, 20, 0.9);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 20px;
+            animation: bounce 3s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .feature-icon i {
+            font-size: 48px;
+            color: #ff0000;
+        }
+
+        .feature-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: #888;
+            line-height: 1.6;
+            font-size: 13px;
+        }
+
+        /* Process Section */
+        .process {
+            padding: 100px 60px;
+            background: #050505;
+        }
+
+        .process-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .process-steps {
+            list-style: none;
+            padding: 0;
+        }
+
+        .process-steps li {
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            opacity: 0;
+            transform: translateX(-30px);
+            animation: slideInLeft 0.6s ease forwards;
+        }
+
+        .process-steps li:nth-child(1) { animation-delay: 0.2s; }
+        .process-steps li:nth-child(2) { animation-delay: 0.4s; }
+        .process-steps li:nth-child(3) { animation-delay: 0.6s; }
+        .process-steps li:nth-child(4) { animation-delay: 0.8s; }
+
+        @keyframes slideInLeft {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 0, 0, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff0000;
+            font-weight: 700;
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .process-steps li:hover .step-number {
+            background: #ff0000;
+            color: #ffffff;
+            transform: scale(1.1);
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 80px 60px;
+            background: rgba(255, 0, 0, 0.02);
+            position: relative;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .stat-item {
+            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        .stat-item:nth-child(1) { animation-delay: 0.2s; }
+        .stat-item:nth-child(2) { animation-delay: 0.4s; }
+        .stat-item:nth-child(3) { animation-delay: 0.6s; }
+        .stat-item:nth-child(4) { animation-delay: 0.8s; }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+        }
+
+        .stat-item h3 {
+            font-size: 48px;
+            font-weight: 700;
+            color: #ff0000;
+            margin-bottom: 8px;
+        }
+
+        .stat-item p {
+            font-size: 12px;
+            color: #888;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 100px 60px;
+            text-align: center;
+            position: relative;
+            background: linear-gradient(135deg, #000000, #0a0a0a);
+        }
+
+        .cta h2 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .cta p {
+            color: #888;
+            margin-bottom: 40px;
+        }
+
+        /* Footer */
+        .footer {
+            background: #000000;
+            padding: 60px 60px 30px;
+            border-top: 1px solid rgba(255, 0, 0, 0.1);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 50px;
+            margin-bottom: 50px;
+        }
+
+        .footer-section h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            color: #ff0000;
+        }
+
+        .footer-section p {
+            color: #666;
+            line-height: 1.6;
+            font-size: 13px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            background: #ff0000;
+            transform: translateY(-3px);
+        }
+
+        .contact-info p {
+            margin-bottom: 8px;
+        }
+
+        .contact-info i {
+            width: 22px;
+            color: #ff0000;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: #555;
+            font-size: 12px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .process-container {
+                grid-template-columns: 1fr;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+            .header__menu {
+                float: none;
+                text-align: center;
+                margin-top: 12px;
+            }
+            .header__el {
+                margin: 0 12px;
+            }
+            .hero {
+                padding: 100px 20px 60px;
+            }
+            .hero-title {
+                font-size: 40px;
+            }
+            .hero-title .highlight {
+                font-size: 44px;
+            }
+            .features {
+                padding: 60px 20px;
+            }
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            .process {
+                padding: 60px 20px;
+            }
+            .stats {
+                padding: 50px 20px;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .cta {
+                padding: 60px 20px;
+            }
+            .cta h2 {
+                font-size: 32px;
+            }
+            .footer {
+                padding: 40px 20px 20px;
+            }
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+            .video-container {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div id="canvas-container"></div>
+
+<header class="header" id="header">
+    <div class="header__container">
+        <div class="header__logo">
+            <img class="header__img" src="https://image.ibb.co/kcVou6/path3000.png" alt="TEMPOSYNK">
+            <div class="brand-text">
+                <h4>TEMPOSYNK</h4>
+                <p>INTELLIGENT TIMETABLE</p>
+            </div>
+        </div>
+        <div class="header__menu">
+            <div class="header__el">
+                <a href="/index" class="header__link">HOME</a>
+            </div>
+            <div class="header__el">
+                <a href="/about" class="header__link">ABOUT</a>
+            </div>
+            <div class="header__el">
+                <a href="/contact" class="header__link">CONTACT</a>
+            </div>
+            <div class="header__el">
+                <a href="/login" class="btn btn--white">SIGN IN →</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="main-content">
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-left">
+                <div class="badge">
+                    <span>✨ SMART SCHEDULING SYSTEM</span>
+                </div>
+                <h1 class="hero-title">
+                    Intelligent<br>
+                    <span class="highlight">Timetable Synchronization</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Powered by advanced Python algorithms. Create conflict-free timetables in seconds.
+                </p>
+                <div class="hero-buttons">
+                    <a href="/timetable" class="btn-primary">
+                        <i class="fas fa-arrow-right"></i> GET STARTED
+                    </a>
+                    <a href="/about" class="btn-outline">
+                        <i class="fas fa-play"></i> WATCH DEMO
+                    </a>
+                </div>
+            </div>
+            <div class="hero-right">
+                <!-- VIDEO REPLACES THE CAT ANIMATION HERE -->
+                <div class="video-container">
+                    <video class="hero-video" autoplay loop muted playsinline>
+                        <source src="/assets/video.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="video-overlay"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="section-title">
+            <h2>Core <span style="color:#ff0000;">Capabilities</span></h2>
+            <div class="red-line"></div>
+            <p>Engineered for precision, designed for simplicity</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h3>Smart Algorithm</h3>
+                <p>Python-powered engine that processes complex scheduling constraints with precision.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Resource Optimization</h3>
+                <p>Maximize faculty and room utilization with intelligent allocation algorithms.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3>Lightning Fast</h3>
+                <p>Generate complete timetables in seconds. 10x faster than manual scheduling.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-file-export"></i>
+                </div>
+                <h3>Multiple Formats</h3>
+                <p>Export to PDF, Excel, Word, and CSV with one click.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chalkboard-user"></i>
+                </div>
+                <h3>Faculty Management</h3>
+                <p>Track workloads and handle replacements seamlessly.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-simple"></i>
+                </div>
+                <h3>Analytics Reports</h3>
+                <p>Comprehensive insights on faculty workload and lab utilization.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="process">
+        <div class="process-container">
+            <div class="process-content">
+                <h2>The <span style="color:#ff0000;">Methodology</span></h2>
+                <p>Our scheduling algorithm follows a systematic approach to deliver optimal results</p>
+                <ul class="process-steps">
+                    <li>
+                        <div class="step-number">01</div>
+                        <div><h4>Data Input</h4><p style="color:#888; font-size:13px;">Programs, courses, faculty, and room specifications</p></div>
+                    </li>
+                    <li>
+                        <div class="step-number">02</div>
+                        <div><h4>Constraint Processing</h4><p style="color:#888; font-size:13px;">Analyze availability, capacity, and frequency requirements</p></div>
+                    </li>
+                    <li>
+                        <div class="step-number">03</div>
+                        <div><h4>Algorithm Execution</h4><p style="color:#888; font-size:13px;">Intelligent allocation using optimization algorithms</p></div>
+                    </li>
+                    <li>
+                        <div class="step-number">04</div>
+                        <div><h4>Output Generation</h4><p style="color:#888; font-size:13px;">Produce timetables with comprehensive reports</p></div>
+                    </li>
+                </ul>
+            </div>
+            <div class="process-image">
+                <!-- Process section image remains unchanged -->
+                <canvas id="process-canvas" width="450" height="400" style="width:100%; max-width:450px; height:auto;"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <h3>100%</h3>
+                <p>CONFLICT-FREE</p>
+            </div>
+            <div class="stat-item">
+                <h3>10x</h3>
+                <p>FASTER</p>
+            </div>
+            <div class="stat-item">
+                <h3>24/7</h3>
+                <p>AVAILABILITY</p>
+            </div>
+            <div class="stat-item">
+                <h3>5+</h3>
+                <p>FORMATS</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <h2>Ready to <span style="color:#ff0000;">Transform</span> Your Scheduling?</h2>
+        <p>Join institutions that trust TEMPOSYNK for intelligent timetable management</p>
+        <a href="/timetable" class="btn-primary">
+            <i class="fas fa-calendar-alt"></i> START SCHEDULING
+        </a>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>TEMPOSYNK</h4>
+                <p>Intelligent Timetable Synchronization System. Engineering precision in academic scheduling.</p>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/hitan_dubey/" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.linkedin.com/in/vipul-dubey-13185935b" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://github.com/HitanDubey" target="_blank"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>EXPLORE</h4>
+                <p><a href="/index" style="color:#888; text-decoration:none;">Home</a></p>
+                <p><a href="/about" style="color:#888; text-decoration:none;">About</a></p>
+                <p><a href="/contact" style="color:#888; text-decoration:none;">Contact</a></p>
+                <p><a href="/login" style="color:#888; text-decoration:none;">Sign In</a></p>
+            </div>
+            <div class="footer-section contact-info">
+                <h4>CONTACT</h4>
+                <p><i class="fas fa-phone"></i> +91 7460885647</p>
+                <p><i class="fas fa-envelope"></i> info@temposynk.io</p>
+                <p><i class="fas fa-map-marker-alt"></i> Delhi Technical Campus<br>Greater Noida, India</p>
+            </div>
+            <div class="footer-section">
+                <h4>CREATOR</h4>
+                <p>Vipul Dubey</p>
+                <p style="font-size: 12px; color:#666;">Developer & Algorithm Designer</p>
+                <p style="font-size: 12px; color:#666;">Building unique algorithmic solutions</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 TEMPOSYNK. All rights reserved.</p>
+            <div style="margin-top: 10px; font-size: 11px; color:#444;">
+                Guru Gobind Singh Indraprastha University | Delhi Technical Campus
+            </div>
+        </div>
+    </footer>
+</div>
+
+<!-- Three.js Background Script - KEPT UNCHANGED -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+    // Header scroll effect
+    window.addEventListener('scroll', function() {
+        const header = document.getElementById('header');
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+
+    // Three.js Background Animation - KEPT UNCHANGED
+    const container = document.getElementById('canvas-container');
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x000000);
+    
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 30;
+    
+    const renderer = new THREE.WebGLRenderer({ alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x000000, 0);
+    container.appendChild(renderer.domElement);
+    
+    // Create floating particles
+    const particlesGeometry = new THREE.BufferGeometry();
+    const particlesCount = 1500;
+    const posArray = new Float32Array(particlesCount * 3);
+    
+    for (let i = 0; i < particlesCount * 3; i += 3) {
+        posArray[i] = (Math.random() - 0.5) * 100;
+        posArray[i+1] = (Math.random() - 0.5) * 60;
+        posArray[i+2] = (Math.random() - 0.5) * 50;
+    }
+    
+    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+    
+    const particlesMaterial = new THREE.PointsMaterial({
+        color: 0xff0000,
+        size: 0.1,
+        transparent: true,
+        opacity: 0.5
+    });
+    
+    const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+    scene.add(particlesMesh);
+    
+    // Animation
+    let time = 0;
+    function animate() {
+        requestAnimationFrame(animate);
+        time += 0.002;
+        
+        particlesMesh.rotation.y = time;
+        particlesMesh.rotation.x = time * 0.5;
+        
+        renderer.render(scene, camera);
+    }
+    
+    animate();
+    
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // Process Canvas Animation - KEPT UNCHANGED
+    const processCanvas = document.getElementById('process-canvas');
+    if (processCanvas) {
+        const ctx = processCanvas.getContext('2d');
+        processCanvas.width = 450;
+        processCanvas.height = 400;
+        
+        let rot = 0;
+        
+        function drawProcess() {
+            ctx.clearRect(0, 0, processCanvas.width, processCanvas.height);
+            ctx.fillStyle = '#0a0a0a';
+            ctx.fillRect(0, 0, processCanvas.width, processCanvas.height);
+            
+            const centerX = processCanvas.width / 2;
+            const centerY = processCanvas.height / 2;
+            const wave = Math.sin(rot) * 8;
+            
+            // Draw cute robot
+            ctx.fillStyle = '#4a4a4a';
+            ctx.beginPath();
+            ctx.rect(centerX - 40, centerY - 40 + wave, 80, 70);
+            ctx.fill();
+            
+            // Head
+            ctx.fillStyle = '#6b6b6b';
+            ctx.beginPath();
+            ctx.rect(centerX - 35, centerY - 65 + wave, 70, 35);
+            ctx.fill();
+            
+            // Antenna
+            ctx.fillStyle = '#ff4444';
+            ctx.beginPath();
+            ctx.rect(centerX - 5, centerY - 75 + wave, 10, 20);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(centerX, centerY - 78 + wave, 8, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Eyes
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(centerX - 20, centerY - 50 + wave, 8, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(centerX + 20, centerY - 50 + wave, 8, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Pupils
+            ctx.fillStyle = '#000000';
+            ctx.beginPath();
+            ctx.arc(centerX - 20 + Math.sin(rot) * 2, centerY - 50 + wave, 4, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(centerX + 20 + Math.sin(rot) * 2, centerY - 50 + wave, 4, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Smile
+            ctx.strokeStyle = '#ff0000';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY - 35 + wave, 15, 0.1, Math.PI - 0.1);
+            ctx.stroke();
+            
+            rot += 0.05;
+            requestAnimationFrame(drawProcess);
+        }
+        drawProcess();
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEMPOSYNK | Contact Us - Intelligent Timetable Synchronization System</title>
+    <link rel="shortcut icon" type="image/png" href="https://image.ibb.co/fOur3b/favicon.png"/>
+    <meta name="theme-color" content="#000000">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000000;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ff0000;
+            border-radius: 3px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 60px;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            border-bottom: 1px solid rgba(255, 0, 0, 0.2);
+        }
+
+        .header.scrolled {
+            padding: 12px 60px;
+            background: rgba(0, 0, 0, 0.95);
+        }
+
+        .header__logo {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .header__img {
+            width: 42px;
+            height: 42px;
+            transition: transform 0.3s ease;
+            filter: brightness(0) invert(1);
+        }
+
+        .brand-text {
+            display: inline-block;
+            margin-left: 12px;
+            vertical-align: middle;
+        }
+
+        .brand-text h4 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #fff, #ff0000);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-text p {
+            font-size: 8px;
+            margin: 0;
+            color: #888;
+            letter-spacing: 1px;
+        }
+
+        .header__menu {
+            float: right;
+            margin-top: 8px;
+        }
+
+        .header__el {
+            display: inline-block;
+            margin-left: 35px;
+        }
+
+        .header__link {
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .header__link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #ff0000;
+            transition: width 0.3s ease;
+        }
+
+        .header__link:hover::after {
+            width: 100%;
+        }
+
+        .header__link:hover {
+            color: #ff0000;
+        }
+
+        .btn--white {
+            background: transparent;
+            padding: 8px 24px;
+            border-radius: 30px;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 12px;
+            border: 1.5px solid rgba(255, 0, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .btn--white:hover {
+            background: #ff0000;
+            border-color: #ff0000;
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .main-content {
+            position: relative;
+            z-index: 1;
+            padding-top: 100px;
+        }
+
+        /* Hero Section */
+        .contact-hero {
+            padding: 60px 60px 40px;
+            position: relative;
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            margin-bottom: 24px;
+            border-left: 3px solid #ff0000;
+            background: rgba(255, 0, 0, 0.05);
+        }
+
+        .badge span {
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            color: #ff0000;
+            text-transform: uppercase;
+        }
+
+        .contact-hero h1 {
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .contact-hero h1 .highlight {
+            color: #ff0000;
+        }
+
+        .contact-hero p {
+            font-size: 18px;
+            color: #888;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            padding: 60px 60px 80px;
+        }
+
+        .contact-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+        }
+
+        /* Contact Info Cards */
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .info-card {
+            background: rgba(10, 10, 10, 0.8);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 0, 0, 0.3);
+        }
+
+        .info-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 0, 0, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .info-icon i {
+            font-size: 28px;
+            color: #ff0000;
+        }
+
+        .info-card h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .info-card p {
+            color: #888;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .info-detail {
+            font-size: 16px;
+            color: #ffffff;
+            text-decoration: none;
+            display: inline-block;
+            transition: color 0.3s ease;
+        }
+
+        .info-detail:hover {
+            color: #ff0000;
+        }
+
+        .social-links-large {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .social-links-large a {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-links-large a:hover {
+            background: #ff0000;
+            transform: translateY(-3px);
+        }
+
+        /* Contact Form */
+        .contact-form {
+            background: rgba(10, 10, 10, 0.8);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .contact-form h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .contact-form p {
+            color: #888;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #ccc;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #ff0000;
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: #ff0000;
+            padding: 14px;
+            border-radius: 40px;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-submit:hover {
+            background: #cc0000;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.3);
+        }
+
+        /* Map Section */
+        .map-section {
+            padding: 0 60px 80px;
+        }
+
+        .map-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 0, 0, 0.2);
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 350px;
+            display: block;
+            filter: grayscale(0.5) brightness(0.8);
+            transition: filter 0.3s ease;
+        }
+
+        .map-container:hover iframe {
+            filter: grayscale(0) brightness(1);
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            padding: 60px 60px 80px;
+            background: rgba(5, 5, 5, 0.5);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-size: 36px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .section-title .red-line {
+            width: 60px;
+            height: 3px;
+            background: #ff0000;
+            margin: 20px auto 0;
+        }
+
+        .section-title p {
+            font-size: 16px;
+            color: #888;
+            max-width: 600px;
+            margin: 20px auto 0;
+        }
+
+        .faq-grid {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .faq-item {
+            background: rgba(10, 10, 10, 0.6);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question {
+            padding: 20px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: rgba(255, 0, 0, 0.05);
+        }
+
+        .faq-question h4 {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .faq-question i {
+            color: #ff0000;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding: 0 25px;
+            border-top: none;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+            padding: 0 25px 20px 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .faq-answer p {
+            color: #888;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 80px 60px;
+            text-align: center;
+            background: linear-gradient(135deg, #000000, #0a0a0a);
+        }
+
+        .cta h2 {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+
+        .cta p {
+            color: #888;
+            margin-bottom: 30px;
+        }
+
+        .btn-primary {
+            background: #ff0000;
+            padding: 14px 36px;
+            border-radius: 40px;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: #cc0000;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.3);
+        }
+
+        /* Footer */
+        .footer {
+            background: #000000;
+            padding: 60px 60px 30px;
+            border-top: 1px solid rgba(255, 0, 0, 0.1);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 50px;
+            margin-bottom: 50px;
+        }
+
+        .footer-section h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            color: #ff0000;
+        }
+
+        .footer-section p {
+            color: #666;
+            line-height: 1.6;
+            font-size: 13px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            background: #ff0000;
+            transform: translateY(-3px);
+        }
+
+        .contact-info p {
+            margin-bottom: 8px;
+        }
+
+        .contact-info i {
+            width: 22px;
+            color: #ff0000;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: #555;
+            font-size: 12px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .contact-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+            .header__menu {
+                float: none;
+                text-align: center;
+                margin-top: 12px;
+            }
+            .header__el {
+                margin: 0 12px;
+            }
+            .main-content {
+                padding-top: 120px;
+            }
+            .contact-hero {
+                padding: 40px 20px;
+            }
+            .contact-hero h1 {
+                font-size: 36px;
+            }
+            .contact-section {
+                padding: 40px 20px;
+            }
+            .contact-form {
+                padding: 30px;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            .map-section {
+                padding: 0 20px 60px;
+            }
+            .faq-section {
+                padding: 50px 20px;
+            }
+            .section-title h2 {
+                font-size: 28px;
+            }
+            .cta {
+                padding: 60px 20px;
+            }
+            .cta h2 {
+                font-size: 28px;
+            }
+            .footer {
+                padding: 40px 20px 20px;
+            }
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header" id="header">
+    <div class="header__container">
+        <div class="header__logo">
+            <img class="header__img" src="https://image.ibb.co/kcVou6/path3000.png" alt="TEMPOSYNK">
+            <div class="brand-text">
+                <h4>TEMPOSYNK</h4>
+                <p>INTELLIGENT TIMETABLE</p>
+            </div>
+        </div>
+        <div class="header__menu">
+            <div class="header__el">
+                <a href="/index" class="header__link">HOME</a>
+            </div>
+            <div class="header__el">
+                <a href="/about" class="header__link">ABOUT</a>
+            </div>
+            <div class="header__el">
+                <a href="/contact" class="header__link">CONTACT</a>
+            </div>
+            <div class="header__el">
+                <a href="/login" class="btn btn--white">SIGN IN →</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="main-content">
+    <!-- Hero Section -->
+    <section class="contact-hero">
+        <div class="hero-container">
+            <div class="badge">
+                <span>GET IN TOUCH</span>
+            </div>
+            <h1>Let's <span class="highlight">Connect</span></h1>
+            <p>Have questions about TEMPOSYNK? We're here to help. Reach out to us anytime.</p>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section">
+        <div class="contact-container">
+            <!-- Contact Info -->
+            <div class="contact-info">
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3>Visit Us</h3>
+                    <p>Guru Gobind Singh Indraprastha University<br>Delhi Technical Campus, Greater Noida<br>Uttar Pradesh, India - 201306</p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <h3>Call Us</h3>
+                    <p>Monday - Friday, 9:00 AM - 6:00 PM</p>
+                    <a href="tel:+917460885647" class="info-detail">+91 7460885647</a>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h3>Email Us</h3>
+                    <p>We'll respond within 24-48 hours</p>
+                    <a href="mailto:info@temposynk.io" class="info-detail">info@temposynk.io</a>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-share-alt"></i>
+                    </div>
+                    <h3>Connect With Us</h3>
+                    <p>Follow us on social media for updates</p>
+                    <div class="social-links-large">
+                        <a href="https://www.instagram.com/hitan_dubey/" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.linkedin.com/in/vipul-dubey-13185935b" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://github.com/HitanDubey" target="_blank"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <form class="contact-form" action="/submit-contact" method="post">
+                {% csrf_token %}
+                <h3>Send Us a Message</h3>
+                <p>Fill out the form below and we'll get back to you shortly.</p>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>First Name *</label>
+                        <input type="text" name="first_name" placeholder="Enter your first name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <input type="text" name="last_name" placeholder="Enter your last name">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Email Address *</label>
+                        <input type="email" name="email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" name="phone" placeholder="Enter your phone number">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Subject *</label>
+                    <select name="subject" required>
+                        <option value="">Select a topic</option>
+                        <option value="General Inquiry">General Inquiry</option>
+                        <option value="Technical Support">Technical Support</option>
+                        <option value="Pricing">Pricing & Plans</option>
+                        <option value="Partnership">Partnership Opportunity</option>
+                        <option value="Feedback">Feedback</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Message *</label>
+                    <textarea name="message" placeholder="Tell us how we can help you..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-paper-plane"></i> SEND MESSAGE
+                </button>
+            </form>
+        </div>
+    </section>
+
+ <!-- Map Section -->
+<section class="map-section">
+    <div class="map-container">
+        <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3507.160436220834!2d77.4762434413054!3d28.474714629943133!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cebdaaaaaaaab%3A0xef507664000ad02f!2sDelhi%20Technical%20Campus!5e0!3m2!1sen!2sin!4v1774153686671!5m2!1sen!2sin" 
+            width="100%" 
+            height="350" 
+            style="border:0; display:block;" 
+            allowfullscreen="" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+    </div>
+</section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="section-title">
+            <h2>Frequently Asked <span style="color:#ff0000;">Questions</span></h2>
+            <div class="red-line"></div>
+            <p>Find quick answers to common questions about TEMPOSYNK</p>
+        </div>
+        <div class="faq-grid">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h4>How does TEMPOSYNK generate timetables?</h4>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>TEMPOSYNK uses advanced Python algorithms that analyze faculty availability, room capacity, course frequency, and scheduling constraints to generate optimal, conflict-free timetables automatically.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h4>Is TEMPOSYNK free to use?</h4>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>TEMPOSYNK offers flexible pricing plans. Contact us for detailed information about our subscription options tailored to your institution's needs.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h4>Can I export timetables to different formats?</h4>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes! TEMPOSYNK supports export to PDF, Excel, Word, and CSV formats, making it easy to share and integrate with existing systems.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h4>How do I handle faculty replacements?</h4>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>TEMPOSYNK includes a professor replacement feature. Simply enter the absent professor's ID and replacement details, and the system automatically updates the timetable.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h4>What support do you offer?</h4>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>We provide email support, documentation, and technical assistance. Contact us at info@temposynk.io for any questions or issues.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <h2>Ready to <span style="color:#ff0000;">Transform</span> Your Scheduling?</h2>
+        <p>Join institutions that trust TEMPOSYNK for intelligent timetable management</p>
+        <a href="/timetable" class="btn-primary">
+            <i class="fas fa-arrow-right"></i> GET STARTED
+        </a>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>TEMPOSYNK</h4>
+                <p>Intelligent Timetable Synchronization System. Engineering precision in academic scheduling.</p>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/hitan_dubey/" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.linkedin.com/in/vipul-dubey-13185935b" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://github.com/HitanDubey" target="_blank"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>EXPLORE</h4>
+                <p><a href="/index" style="color:#888; text-decoration:none;">Home</a></p>
+                <p><a href="/about" style="color:#888; text-decoration:none;">About</a></p>
+                <p><a href="/contact" style="color:#888; text-decoration:none;">Contact</a></p>
+                <p><a href="/login" style="color:#888; text-decoration:none;">Sign In</a></p>
+            </div>
+            <div class="footer-section contact-info">
+                <h4>CONTACT</h4>
+                <p><i class="fas fa-phone"></i> +91 7460885647</p>
+                <p><i class="fas fa-envelope"></i> info@temposynk.io</p>
+                <p><i class="fas fa-map-marker-alt"></i> Guru Gobind Singh Indraprastha University<br>Delhi Technical Campus, Greater Noida</p>
+            </div>
+            <div class="footer-section">
+                <h4>CREATOR</h4>
+                <p>Vipul Dubey</p>
+                <p style="font-size: 12px; color:#666;">ML Engineer & Algorithm Designer</p>
+                <p style="font-size: 12px; color:#666;">Building unique algorithmic solutions in AI & Software</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 TEMPOSYNK - Intelligent Timetable Synchronization System. All rights reserved.</p>
+            <div style="margin-top: 10px; font-size: 11px; color:#444;">
+                Guru Gobind Singh Indraprastha University | Delhi Technical Campus, Greater Noida
+            </div>
+        </div>
+    </footer>
+</div>
+
+<script>
+    // Header scroll effect
+    window.addEventListener('scroll', function() {
+        const header = document.getElementById('header');
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+
+    // FAQ Accordion
+    document.querySelectorAll('.faq-question').forEach(question => {
+        question.addEventListener('click', () => {
+            const faqItem = question.parentElement;
+            faqItem.classList.toggle('active');
+        });
+    });
+</script>
+
+</body>
+</html>

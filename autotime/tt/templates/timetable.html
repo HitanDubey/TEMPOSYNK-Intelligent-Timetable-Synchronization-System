@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEMPOSYNK | Getting Started - Intelligent Timetable Synchronization System</title>
+    <link rel="shortcut icon" type="image/png" href="https://image.ibb.co/fOur3b/favicon.png"/>
+    <meta name="theme-color" content="#000000">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000000;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ff0000;
+            border-radius: 3px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 60px;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            border-bottom: 1px solid rgba(255, 0, 0, 0.2);
+        }
+
+        .header.scrolled {
+            padding: 12px 60px;
+            background: rgba(0, 0, 0, 0.95);
+        }
+
+        .header__logo {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .header__img {
+            width: 42px;
+            height: 42px;
+            transition: transform 0.3s ease;
+            filter: brightness(0) invert(1);
+        }
+
+        .brand-text {
+            display: inline-block;
+            margin-left: 12px;
+            vertical-align: middle;
+        }
+
+        .brand-text h4 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #fff, #ff0000);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-text p {
+            font-size: 8px;
+            margin: 0;
+            color: #888;
+            letter-spacing: 1px;
+        }
+
+        .header__menu {
+            float: right;
+            margin-top: 8px;
+        }
+
+        .header__el {
+            display: inline-block;
+            margin-left: 35px;
+        }
+
+        .header__link {
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .header__link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #ff0000;
+            transition: width 0.3s ease;
+        }
+
+        .header__link:hover::after {
+            width: 100%;
+        }
+
+        .header__link:hover {
+            color: #ff0000;
+        }
+
+        .btn--white {
+            background: transparent;
+            padding: 8px 24px;
+            border-radius: 30px;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 12px;
+            border: 1.5px solid rgba(255, 0, 0, 0.5);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn--white:hover {
+            background: #ff0000;
+            border-color: #ff0000;
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .main-content {
+            position: relative;
+            z-index: 1;
+            padding-top: 100px;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 60px 60px 40px;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            margin-bottom: 24px;
+            border-left: 3px solid #ff0000;
+            background: rgba(255, 0, 0, 0.05);
+        }
+
+        .badge span {
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            color: #ff0000;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 .highlight {
+            color: #ff0000;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #888;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Steps Section */
+        .steps-section {
+            padding: 40px 60px 80px;
+        }
+
+        .steps-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .step-card {
+            background: rgba(10, 10, 10, 0.8);
+            border-radius: 20px;
+            padding: 35px 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .step-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255, 0, 0, 0.3);
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 0, 0, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 24px;
+            font-weight: 700;
+            color: #ff0000;
+        }
+
+        .step-card h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .step-card p {
+            color: #888;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Process Flow */
+        .process-flow {
+            padding: 60px 60px;
+            background: rgba(5, 5, 5, 0.5);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-size: 36px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .section-title .red-line {
+            width: 60px;
+            height: 3px;
+            background: #ff0000;
+            margin: 20px auto 0;
+        }
+
+        .flow-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .flow-item {
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
+            padding: 25px;
+            background: rgba(10, 10, 10, 0.6);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .flow-item:hover {
+            background: rgba(255, 0, 0, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .flow-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 0, 0, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+        }
+
+        .flow-icon i {
+            font-size: 28px;
+            color: #ff0000;
+        }
+
+        .flow-item h4 {
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .flow-item p {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .arrow {
+            display: flex;
+            align-items: center;
+            color: #ff0000;
+            font-size: 24px;
+        }
+
+        /* Quick Tips */
+        .tips-section {
+            padding: 60px 60px;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .tip-card {
+            background: rgba(10, 10, 10, 0.6);
+            border-radius: 16px;
+            padding: 25px;
+            display: flex;
+            gap: 20px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .tip-card:hover {
+            border-color: rgba(255, 0, 0, 0.3);
+        }
+
+        .tip-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 0, 0, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .tip-icon i {
+            font-size: 24px;
+            color: #ff0000;
+        }
+
+        .tip-content h4 {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .tip-content p {
+            color: #888;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 80px 60px;
+            text-align: center;
+            background: linear-gradient(135deg, #000000, #0a0a0a);
+        }
+
+        .cta h2 {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+
+        .cta p {
+            color: #888;
+            margin-bottom: 30px;
+        }
+
+        .btn-primary {
+            background: #ff0000;
+            padding: 14px 36px;
+            border-radius: 40px;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: #cc0000;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.3);
+        }
+
+        /* Footer */
+        .footer {
+            background: #000000;
+            padding: 60px 60px 30px;
+            border-top: 1px solid rgba(255, 0, 0, 0.1);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 50px;
+            margin-bottom: 50px;
+        }
+
+        .footer-section h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            color: #ff0000;
+        }
+
+        .footer-section p {
+            color: #666;
+            line-height: 1.6;
+            font-size: 13px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            background: #ff0000;
+            transform: translateY(-3px);
+        }
+
+        .contact-info p {
+            margin-bottom: 8px;
+        }
+
+        .contact-info i {
+            width: 22px;
+            color: #ff0000;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: #555;
+            font-size: 12px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .steps-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .tips-grid {
+                grid-template-columns: 1fr;
+            }
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .flow-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .arrow {
+                transform: rotate(90deg);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+            .header__menu {
+                float: none;
+                text-align: center;
+                margin-top: 12px;
+            }
+            .header__el {
+                margin: 0 12px;
+            }
+            .main-content {
+                padding-top: 120px;
+            }
+            .hero {
+                padding: 40px 20px;
+            }
+            .hero h1 {
+                font-size: 32px;
+            }
+            .steps-section {
+                padding: 30px 20px 50px;
+            }
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+            .process-flow {
+                padding: 40px 20px;
+            }
+            .section-title h2 {
+                font-size: 28px;
+            }
+            .tips-section {
+                padding: 40px 20px;
+            }
+            .cta {
+                padding: 60px 20px;
+            }
+            .cta h2 {
+                font-size: 28px;
+            }
+            .footer {
+                padding: 40px 20px 20px;
+            }
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header" id="header">
+    <div class="header__container">
+        <div class="header__logo">
+            <img class="header__img" src="https://image.ibb.co/kcVou6/path3000.png" alt="TEMPOSYNK">
+            <div class="brand-text">
+                <h4>TEMPOSYNK</h4>
+                <p>INTELLIGENT TIMETABLE</p>
+            </div>
+        </div>
+        <div class="header__menu">
+            <div class="header__el">
+                <a href="/index" class="header__link">HOME</a>
+            </div>
+            <div class="header__el">
+                <a href="/about" class="header__link">ABOUT</a>
+            </div>
+            <div class="header__el">
+                <a href="/contact" class="header__link">CONTACT</a>
+            </div>
+            <div class="header__el">
+                <a href="/login" class="btn btn--white">SIGN IN →</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="main-content">
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="badge">
+            <span>GETTING STARTED</span>
+        </div>
+        <h1>Your Journey to <span class="highlight">Smart Scheduling</span></h1>
+        <p>Follow these simple steps to create your first timetable with TEMPOSYNK</p>
+    </section>
+
+    <!-- Steps Section -->
+    <section class="steps-section">
+        <div class="steps-container">
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>Add Program</h3>
+                    <p>Navigate to "Add Program" and enter your academic programs with semester details. This defines the structure of your institution.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>Add Faculty</h3>
+                    <p>Register all professors with their details - ID, name, course assignments, phone number, and email for contact.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>Add Courses</h3>
+                    <p>Enter course codes, names, frequency per week, and associate them with specific programs and semesters.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3>Add Lecture Rooms</h3>
+                    <p>Register all lecture halls with their unique IDs and seating capacities for proper resource allocation.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">5</div>
+                    <h3>Add Lab Rooms</h3>
+                    <p>Enter laboratory details including lab IDs and capacities for practical session scheduling.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">6</div>
+                    <h3>Generate Timetable</h3>
+                    <p>Select program, semester, batches, and click generate. Watch our algorithm create optimal schedules!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Flow -->
+    <section class="process-flow">
+        <div class="section-title">
+            <h2>How It <span style="color:#ff0000;">Works</span></h2>
+            <div class="red-line"></div>
+            <p>From data input to final timetable - the TEMPOSYNK workflow</p>
+        </div>
+        <div class="flow-container">
+            <div class="flow-item">
+                <div class="flow-icon">
+                    <i class="fas fa-database"></i>
+                </div>
+                <h4>Input Data</h4>
+                <p>Programs, Faculty, Courses, Rooms</p>
+            </div>
+            <div class="arrow">
+                <i class="fas fa-arrow-right"></i>
+            </div>
+            <div class="flow-item">
+                <div class="flow-icon">
+                    <i class="fas fa-microchip"></i>
+                </div>
+                <h4>Algorithm Processing</h4>
+                <p>Constraint analysis & optimization</p>
+            </div>
+            <div class="arrow">
+                <i class="fas fa-arrow-right"></i>
+            </div>
+            <div class="flow-item">
+                <div class="flow-icon">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <h4>Timetable Generation</h4>
+                <p>Conflict-free schedules</p>
+            </div>
+            <div class="arrow">
+                <i class="fas fa-arrow-right"></i>
+            </div>
+            <div class="flow-item">
+                <div class="flow-icon">
+                    <i class="fas fa-download"></i>
+                </div>
+                <h4>Export & Share</h4>
+                <p>PDF, Excel, Word, CSV</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Tips -->
+    <section class="tips-section">
+        <div class="section-title">
+            <h2>Quick <span style="color:#ff0000;">Tips</span></h2>
+            <div class="red-line"></div>
+            <p>Best practices for optimal scheduling results</p>
+        </div>
+        <div class="tips-grid">
+            <div class="tip-card">
+                <div class="tip-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="tip-content">
+                    <h4>Verify All Data Before Generation</h4>
+                    <p>Ensure all programs, faculty, courses, and rooms are correctly entered for the algorithm to work effectively.</p>
+                </div>
+            </div>
+            <div class="tip-card">
+                <div class="tip-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="tip-content">
+                    <h4>Set Appropriate Batch Counts</h4>
+                    <p>Match the number of batches with available lecture halls for optimal resource utilization.</p>
+                </div>
+            </div>
+            <div class="tip-card">
+                <div class="tip-icon">
+                    <i class="fas fa-exchange-alt"></i>
+                </div>
+                <div class="tip-content">
+                    <h4>Use Professor Replacement Feature</h4>
+                    <p>Handle absent faculty easily by using the replacement feature without regenerating entire timetables.</p>
+                </div>
+            </div>
+            <div class="tip-card">
+                <div class="tip-icon">
+                    <i class="fas fa-file-export"></i>
+                </div>
+                <div class="tip-content">
+                    <h4>Export Reports for Analysis</h4>
+                    <p>Download faculty workload and lab utilization reports to monitor resource distribution.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <h2>Ready to <span style="color:#ff0000;">Create</span> Your First Timetable?</h2>
+        <p>Start scheduling smarter with TEMPOSYNK today</p>
+        <a href="/program" class="btn-primary">
+            <i class="fas fa-arrow-right"></i> ADD PROGRAM
+        </a>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>TEMPOSYNK</h4>
+                <p>Intelligent Timetable Synchronization System. Engineering precision in academic scheduling.</p>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/hitan_dubey/" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.linkedin.com/in/vipul-dubey-13185935b" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://github.com/HitanDubey" target="_blank"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>EXPLORE</h4>
+                <p><a href="/index" style="color:#888; text-decoration:none;">Home</a></p>
+                <p><a href="/about" style="color:#888; text-decoration:none;">About</a></p>
+                <p><a href="/contact" style="color:#888; text-decoration:none;">Contact</a></p>
+                <p><a href="/login" style="color:#888; text-decoration:none;">Sign In</a></p>
+            </div>
+            <div class="footer-section contact-info">
+                <h4>CONTACT</h4>
+                <p><i class="fas fa-phone"></i> +91 7460885647</p>
+                <p><i class="fas fa-envelope"></i> info@temposynk.io</p>
+                <p><i class="fas fa-map-marker-alt"></i> Guru Gobind Singh Indraprastha University<br>Delhi Technical Campus, Greater Noida</p>
+            </div>
+            <div class="footer-section">
+                <h4>CREATOR</h4>
+                <p>Vipul Dubey</p>
+                <p style="font-size: 12px; color:#666;">ML Engineer & Algorithm Designer</p>
+                <p style="font-size: 12px; color:#666;">Building unique algorithmic solutions in AI & Software</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 TEMPOSYNK - Intelligent Timetable Synchronization System. All rights reserved.</p>
+            <div style="margin-top: 10px; font-size: 11px; color:#444;">
+                Guru Gobind Singh Indraprastha University | Delhi Technical Campus, Greater Noida
+            </div>
+        </div>
+    </footer>
+</div>
+
+<script>
+    // Header scroll effect
+    window.addEventListener('scroll', function() {
+        const header = document.getElementById('header');
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+</script>
+
+</body>
+</html>
