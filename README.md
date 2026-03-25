@@ -84,7 +84,9 @@ cd TEMPOSYNK
 
 # Install dependencies
 pip install -r requirements.txt
-
+# go to the main directory where you run your local server
+cd autotime
+cd tt
 # Initialize database with sample data
 python insert_data.py
 
