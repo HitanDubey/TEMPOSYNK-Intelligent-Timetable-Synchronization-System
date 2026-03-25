@@ -10,8 +10,53 @@
 ## 📌 Overview
 
 TEMPOSYNK is a comprehensive timetable management system designed for educational institutions. It eliminates manual scheduling headaches by automatically generating optimized timetables that respect all constraints including faculty availability, room capacity, course frequency, and workload distribution.
-## ScreenShots and trail video  Of The project 
+## 📸 Screenshots & Demo Video
 
+### 🎥 Demo Video
+Watch the complete walkthrough of TEMPOSYNK in action:
+
+[![TEMPOSYNK Demo Video](https://img.shields.io/badge/Watch%20Demo-Video-red?style=for-the-badge&logo=youtube)](https://github.com/HitanDubey/TEMPOSYNK-Intelligent-Timetable-Synchronization-System/blob/main/Demmo%20Video.mp4)
+
+<details>
+<summary>Click to view demo video link</summary>
+
+**📹 Demo Video:** [Click here to watch/download](https://github.com/HitanDubey/TEMPOSYNK-Intelligent-Timetable-Synchronization-System/blob/main/Demmo%20Video.mp4)
+
+</details>
+
+### 🖼️ Screenshots
+
+#### 🏠 Home Page
+*Landing page with 3D background animation and system overview*
+
+![Home Page](home.png)
+
+#### ℹ️ About Page
+*System information, mission, vision, and technology stack*
+
+![About Page](about.png)
+
+#### 📝 Registration Page
+*User sign-up with password strength validation*
+
+![Registration Page](regi.png)
+
+#### 📊 Dashboard
+*Admin dashboard with quick access to all features*
+
+![Dashboard](dashboard.png)
+
+#### ⚙️ Timetable Generator
+*Configuration page for generating timetables with program, semester, and batch selection*
+
+![Generator Page](genpage.png)
+
+#### 📅 Generated Timetable Output
+*Conflict-free timetable display with faculty workload and lab utilization reports*
+
+![Output Page](output.png)
+
+---
 ### ✨ Key Features
 
 - **🤖 Intelligent Algorithm** - Python-powered engine that processes complex scheduling constraints
