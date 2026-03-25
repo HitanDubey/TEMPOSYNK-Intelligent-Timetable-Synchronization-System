@@ -89,7 +89,7 @@ cd autotime
 cd tt
 
 # Initialize database with sample data 
-#step 1 and step 2 only run when db.sqlite3 is not get download due to github server serror or any fault
+#step 1 and step 2 only run when db.sqlite3 is not get download due to github server error or any fault
  step 1 : python insert_data.py
 
 # Run migrations
