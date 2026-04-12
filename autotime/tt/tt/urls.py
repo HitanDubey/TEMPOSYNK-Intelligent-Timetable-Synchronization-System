@@ -47,8 +47,8 @@ urlpatterns = [
     path('deletelabroom/', view.delete_labroom),
     path('replace_professor/', view.replace_professor),
     path('download_timetable/', view.download_timetable),
-    path('download_faculty_report/', view.download_faculty_report),
-    path('download_lab_report/', view.download_lab_report),
+    # NEW: Faculty individual timetable download
+    path('download_faculty_timetable/<str:faculty_id>/', view.download_faculty_individual_timetable, name='download_faculty_timetable'),
 ]
 
 # ============ ADD THIS SECTION TO SERVE STATIC FILES ============

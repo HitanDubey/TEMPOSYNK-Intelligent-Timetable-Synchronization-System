@@ -341,98 +341,130 @@
             margin-top: 4px;
         }
 
-        .faculty-needed {
-            font-size: 10px;
-            color: #ff8888;
-            display: block;
-            margin-top: 4px;
+        /* Faculty Timetable Cards - Matching Excel Format */
+        .faculty-section {
+            margin-top: 60px;
         }
 
-        .report-section {
-            background: rgba(10, 10, 10, 0.6);
+        .faculty-section-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .faculty-section-title .highlight {
+            color: #ff0000;
+        }
+
+        .faculty-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(650px, 1fr));
+            gap: 30px;
+        }
+
+        .faculty-card {
+            background: rgba(10, 10, 10, 0.95);
             border-radius: 20px;
-            padding: 30px;
-            margin-top: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+            transition: all 0.3s ease;
         }
 
-        .report-header {
+        .faculty-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 0, 0, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .faculty-header {
+            background: rgba(255, 0, 0, 0.1);
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            gap: 15px;
         }
 
-        .report-header h3 {
+        .faculty-info h3 {
             font-size: 20px;
             font-weight: 600;
+            margin-bottom: 5px;
         }
 
-        .report-header h3 i {
-            color: #ff0000;
-            margin-right: 10px;
+        .faculty-info p {
+            font-size: 12px;
+            color: #888;
         }
 
-        .report-table {
-            width: 100%;
-            border-collapse: collapse;
+        .faculty-download-btns {
+            display: flex;
+            gap: 8px;
         }
 
-        .report-table th {
-            background: rgba(255, 0, 0, 0.05);
-            padding: 12px;
-            text-align: left;
-            font-size: 13px;
-        }
-
-        .report-table td {
-            padding: 10px 12px;
-            text-align: left;
-            vertical-align: top;
-        }
-
-        .report-table tr:hover {
-            background: rgba(255, 255, 255, 0.02);
-        }
-
-        .capacity-badge {
-            background: rgba(255, 0, 0, 0.1);
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 11px;
-            display: inline-block;
-            margin: 2px 0;
-        }
-
-        .summary-card {
-            background: rgba(255, 0, 0, 0.05);
-            border-radius: 12px;
-            padding: 15px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .summary-card:hover {
-            transform: translateY(-2px);
-            background: rgba(255, 0, 0, 0.1);
-        }
-
-        .progress-bar {
-            flex: 1;
+        .download-icon {
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            height: 6px;
-            overflow: hidden;
+            padding: 8px;
+            border-radius: 50%;
+            color: #fff;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            width: 34px;
+            height: 34px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .progress-fill {
+        .download-icon:hover {
             background: #ff0000;
-            border-radius: 10px;
-            height: 100%;
-            transition: width 0.3s ease;
+            transform: translateY(-2px);
+        }
+
+        .faculty-timetable {
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        .faculty-timetable table {
+            min-width: 550px;
+            font-size: 12px;
+        }
+
+        .faculty-timetable th {
+            font-size: 12px;
+            padding: 10px 8px;
+        }
+
+        .faculty-timetable td {
+            padding: 10px 8px;
+            font-size: 12px;
+            vertical-align: middle;
+        }
+
+        .faculty-timetable .time-col {
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .lab-cell {
+            background: rgba(0, 100, 200, 0.1);
+        }
+
+        .faculty-course-code {
+            font-weight: 700;
+            color: #ff6666;
+            font-size: 12px;
+        }
+        
+        .faculty-course-name {
+            font-size: 10px;
+            color: #aaa;
+            display: block;
+            margin-top: 2px;
         }
 
         .no-data {
@@ -552,25 +584,6 @@
             border-color: #ff0000;
         }
 
-        .logo-preview {
-            width: 80px;
-            height: 80px;
-            margin: 10px auto;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 2px solid rgba(255, 0, 0, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255,255,255,0.05);
-        }
-
-        .logo-preview img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-
         .modal-buttons {
             display: flex;
             gap: 15px;
@@ -605,6 +618,19 @@
 
         .btn-cancel:hover {
             background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .logo-preview {
+            width: 80px;
+            height: 80px;
+            margin: 10px auto;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid rgba(255, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
         }
 
         @media (max-width: 768px) {
@@ -641,73 +667,9 @@
             .replacement-form input {
                 flex: 1;
             }
-            .modal-content {
-                margin: 20% auto;
-                padding: 20px;
+            .faculty-grid {
+                grid-template-columns: 1fr;
             }
-        }
-    </style>
-    
-    <!-- Download-specific styles that won't affect the main page -->
-    <style id="download-styles">
-        /* These styles are copied for download generation */
-        .download-header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 20px;
-            border-bottom: 2px solid #ff0000;
-        }
-        .download-logo {
-            max-width: 40px;
-            height: auto;
-            margin: 0 auto 15px;
-            display: block;
-        }
-        .download-college-name {
-            font-size: 28px;
-            font-weight: 700;
-            color: #ff0000;
-            margin: 10px 0;
-        }
-        .download-title {
-            font-size: 24px;
-            font-weight: 600;
-            color: #ffffff;
-            margin: 10px 0;
-        }
-        .download-meta {
-            font-size: 12px;
-            color: #888;
-            margin-top: 15px;
-        }
-        .download-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            font-size: 12px;
-        }
-        .download-table th {
-            background: #ff0000;
-            color: white;
-            padding: 10px;
-            border: 1px solid #333;
-        }
-        .download-table td {
-            padding: 8px;
-            border: 1px solid #333;
-            text-align: center;
-        }
-        .download-table .time-col {
-            background: #f5f5f5;
-            font-weight: bold;
-        }
-        .download-footer {
-            margin-top: 40px;
-            text-align: center;
-            font-size: 10px;
-            color: #666;
-            padding-top: 20px;
-            border-top: 1px solid #333;
         }
     </style>
 </head>
@@ -831,7 +793,7 @@
                         <div class="logo-preview" id="logo_preview">
                             <i class="fas fa-image" style="color:#666;"></i>
                         </div>
-                        <small style="color:#666;">Upload your college logo to appear on the document (Max 80x80px)</small>
+                        <small style="color:#666;">Upload your college logo to appear on the document</small>
                     </div>
                     <div class="modal-buttons">
                         <button type="button" class="btn-cancel" onclick="closeDownloadModal()">Cancel</button>
@@ -841,7 +803,7 @@
             </div>
         </div>
 
-        <!-- Timetables -->
+        <!-- MAIN TIMETABLES -->
         {% for prog, data in schedules.items %}
             {% if data.matrix and data.matrix|length > 0 %}
             <div class="timetable-section" id="timetable-{{ forloop.counter }}">
@@ -867,31 +829,31 @@
                                 {% for cell in row.cells %}
                                 <td>
                                     {% if cell.type == 'lunch' %}
-                                        <span class="lunch-cell">🍽️ LUNCH BREAK</span>
+                                        🍽️ LUNCH BREAK
                                     {% elif cell.type == 'free' %}
-                                        <span class="free-cell">— Free —</span>
+                                        —
                                     {% elif cell.type == 'course' %}
-                                        <span class="course-code">{{ cell.course }}</span>
+                                        <strong>{{ cell.course }}</strong>
                                         {% if cell.course_name %}
-                                            <span class="course-name">{{ cell.course_name }}</span>
+                                            <br><small>{{ cell.course_name }}</small>
                                         {% endif %}
                                         {% if cell.professor %}
-                                            <span class="prof-name"><i class="fas fa-user"></i> {{ cell.professor }}</span>
+                                            <br><small style="color:#888;">{{ cell.professor }}</small>
                                         {% endif %}
                                     {% elif cell.type == 'lab_needed' %}
-                                        <span class="course-code">{{ cell.course }}</span>
+                                        <strong>{{ cell.course }}</strong>
                                         {% if cell.course_name %}
-                                            <span class="course-name">{{ cell.course_name }}</span>
+                                            <br><small>{{ cell.course_name }}</small>
                                         {% endif %}
-                                        <span class="faculty-needed"><i class="fas fa-flask"></i> Lab Faculty Needed</span>
+                                        <br><small style="color:#ff8888;">Lab Faculty Needed</small>
                                     {% elif cell.type == 'faculty_needed' %}
-                                        <span class="course-code">{{ cell.course }}</span>
+                                        <strong>{{ cell.course }}</strong>
                                         {% if cell.course_name %}
-                                            <span class="course-name">{{ cell.course_name }}</span>
+                                            <br><small>{{ cell.course_name }}</small>
                                         {% endif %}
-                                        <span class="faculty-needed"><i class="fas fa-chalkboard-user"></i> Faculty Needed</span>
+                                        <br><small style="color:#ff8888;">Faculty Needed</small>
                                     {% else %}
-                                        <span class="course-code">{{ cell.course }}</span>
+                                        <strong>{{ cell.course }}</strong>
                                     {% endif %}
                                 </td>
                                 {% endfor %}
@@ -904,190 +866,91 @@
             {% endif %}
         {% endfor %}
 
-        <!-- Faculty Workload Report -->
-        {% if faculty_report and faculty_report|length > 0 %}
-        <div class="report-section" id="faculty-report-section">
-            <div class="report-header">
-                <h3><i class="fas fa-chalkboard-user"></i> Faculty Workload Report</h3>
-                <div class="action-group">
-                    <form method="post" action="/download_faculty_report/">
-                        {% csrf_token %}
-                        <input type="hidden" name="format" value="pdf">
-                        <button type="submit" class="btn btn-outline"><i class="fas fa-file-pdf"></i> PDF</button>
-                    </form>
-                    <form method="post" action="/download_faculty_report/">
-                        {% csrf_token %}
-                        <input type="hidden" name="format" value="excel">
-                        <button type="submit" class="btn btn-outline"><i class="fas fa-file-excel"></i> Excel</button>
-                    </form>
-                </div>
-            </div>
-            
-            <!-- Summary Stats -->
-            <div id="faculty-summary-stats" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 25px;">
-                <div class="summary-card">
-                    <i class="fas fa-users" style="font-size: 24px; color: #ff0000;"></i>
-                    <h3 id="total-faculty" style="margin-top: 8px;">0</h3>
-                    <p style="font-size: 11px; color: #888;">Total Faculty</p>
-                </div>
-                <div class="summary-card">
-                    <i class="fas fa-clock" style="font-size: 24px; color: #ff0000;"></i>
-                    <h3 id="total-hours" style="margin-top: 8px;">0</h3>
-                    <p style="font-size: 11px; color: #888;">Total Weekly Hours</p>
-                </div>
-                <div class="summary-card">
-                    <i class="fas fa-chart-line" style="font-size: 24px; color: #ff0000;"></i>
-                    <h3 id="avg-utilization" style="margin-top: 8px;">0%</h3>
-                    <p style="font-size: 11px; color: #888;">Avg Utilization</p>
-                </div>
-                <div class="summary-card">
-                    <i class="fas fa-flask" style="font-size: 24px; color: #ff0000;"></i>
-                    <h3 id="total-labs" style="margin-top: 8px;">0</h3>
-                    <p style="font-size: 11px; color: #888;">Total Lab Sessions</p>
-                </div>
-            </div>
-            
-            <div class="table-container">
-                <table class="report-table" id="faculty-report-table">
-                    <thead>
-                        <tr>
-                            <th>Faculty ID</th>
-                            <th>Faculty Name</th>
-                            <th>Weekly Hours</th>
-                            <th>Utilization</th>
-                            <th>Lectures</th>
-                            <th>Labs</th>
-                            <th>Courses Taught</th>
-                            <th>Daily Distribution</th>
-                        </thead>
-                    <tbody>
-                        {% for faculty in faculty_report %}
-                        <tr>
-                            <td><strong>{{ faculty.id }}</strong></td>
-                            <td>{{ faculty.name }}</td>
-                            <td class="weekly-hours-cell">
-                                <span class="capacity-badge">{{ faculty.weekly_hours }} hrs</span>
-                                {% if faculty.free_slots > 0 %}
-                                <small style="color:#88ff88; display:block;">({{ faculty.free_slots }} free)</small>
-                                {% endif %}
-                            </td>
-                            <td>
-                                <div style="display: flex; align-items: center; gap: 8px;">
-                                    <div class="progress-bar">
-                                        <div class="progress-fill" data-utilization="{{ faculty.utilization_percentage }}" style="width: {{ faculty.utilization_percentage }}%;"></div>
-                                    </div>
-                                    <span class="utilization-value" style="font-size: 12px;">{{ faculty.utilization_percentage }}%</span>
-                                </div>
-                            </td>
-                            <td class="lectures-cell">{{ faculty.lectures_handled }}</td>
-                            <td class="labs-cell">{{ faculty.labs_handled }}</td>
-                            <td>
-                                {% for course_code, course_data in faculty.courses.items %}
-                                    <div style="margin-bottom: 5px;">
-                                        <strong>{{ course_code }}</strong><br>
-                                        <small style="color:#888;">{{ course_data.name }}</small><br>
-                                        <small style="color:#ff8888;">{{ course_data.hours }} hrs ({{ course_data.type }})</small>
-                                    </div>
+        <!-- INDIVIDUAL FACULTY TIMETABLES - EXACTLY LIKE YOUR EXCEL -->
+        {% if faculty_individual_timetables and faculty_individual_timetables|length > 0 %}
+        <div class="faculty-section">
+            <h2 class="faculty-section-title">Faculty <span class="highlight">Individual Timetables</span></h2>
+            <div class="faculty-grid">
+                {% for fid, faculty in faculty_individual_timetables.items %}
+                <div class="faculty-card" id="faculty-card-{{ fid }}">
+                    <div class="faculty-header">
+                        <div class="faculty-info">
+                            <h3><i class="fas fa-chalkboard-user" style="color:#ff0000;"></i> {{ faculty.name }}</h3>
+                            <p>ID: {{ faculty.id }} | Total Hours: {{ faculty.total_hours }} hrs/week</p>
+                            <p style="font-size: 11px; color:#ff8888;">
+                                Courses: {% for c in faculty.courses_taught %}{{ c.code }} ({{ c.type }}){% if not forloop.last %}, {% endif %}{% endfor %}
+                            </p>
+                        </div>
+                        <div class="faculty-download-btns">
+                            <form method="post" action="/download_faculty_timetable/{{ fid }}/" style="display: inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="format" value="pdf">
+                                <button type="submit" class="download-icon" title="Download PDF">
+                                    <i class="fas fa-file-pdf"></i>
+                                </button>
+                            </form>
+                            <form method="post" action="/download_faculty_timetable/{{ fid }}/" style="display: inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="format" value="excel">
+                                <button type="submit" class="download-icon" title="Download Excel">
+                                    <i class="fas fa-file-excel"></i>
+                                </button>
+                            </form>
+                            <form method="post" action="/download_faculty_timetable/{{ fid }}/" style="display: inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="format" value="csv">
+                                <button type="submit" class="download-icon" title="Download CSV">
+                                    <i class="fas fa-file-csv"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="faculty-timetable">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Monday</th>
+                                    <th>Tuesday</th>
+                                    <th>Wednesday</th>
+                                    <th>Thursday</th>
+                                    <th>Friday</th>
+                                </thead>
+                            <tbody>
+                                {% for time_slot in faculty.schedule %}
+                                <tr>
+                                    <td class="time-col">
+                                        {% if forloop.counter0 == 0 %}09:30-10:30
+                                        {% elif forloop.counter0 == 1 %}10:30-11:30
+                                        {% elif forloop.counter0 == 2 %}11:30-12:25
+                                        {% elif forloop.counter0 == 3 %}12:25-01:15
+                                        {% elif forloop.counter0 == 4 %}01:15-02:00
+                                        {% elif forloop.counter0 == 5 %}02:00-03:30
+                                        {% elif forloop.counter0 == 6 %}03:30-04:30
+                                        {% elif forloop.counter0 == 7 %}04:30-05:30
+                                        {% endif %}
+                                    </td>
+                                    {% for day_cell in time_slot %}
+                                    <td class="{% if day_cell.course == 'LUNCH' %}lunch-cell{% elif day_cell.course == 'Free' %}free-cell{% elif day_cell.is_lab %}lab-cell{% endif %}">
+                                        {% if day_cell.course == 'LUNCH' %}
+                                            🍽️ LUNCH
+                                        {% elif day_cell.course == 'Free' %}
+                                            —
+                                        {% else %}
+                                            <strong class="faculty-course-code">{{ day_cell.course }}</strong>
+                                            {% if day_cell.course_name %}
+                                                <span class="faculty-course-name">{{ day_cell.course_name }}</span>
+                                            {% endif %}
+                                        {% endif %}
+                                    </td>
+                                    {% endfor %}
+                                </tr>
                                 {% endfor %}
-                            </td>
-                            <td>
-                                {% for day, hours in faculty.days.items %}
-                                    <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
-                                        <span>{{ day|slice:":3" }}:</span>
-                                        <span style="color:#ff8888;">{{ hours }} hrs</span>
-                                    </div>
-                                {% endfor %}
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        {% endif %}
-
-        <!-- Lab Utilization Report -->
-        {% if lab_report and lab_report|length > 0 %}
-        <div class="report-section" id="lab-report-section">
-            <div class="report-header">
-                <h3><i class="fas fa-flask"></i> Lab Utilization Report</h3>
-                <div class="action-group">
-                    <form method="post" action="/download_lab_report/">
-                        {% csrf_token %}
-                        <input type="hidden" name="format" value="pdf">
-                        <button type="submit" class="btn btn-outline"><i class="fas fa-file-pdf"></i> PDF</button>
-                    </form>
-                    <form method="post" action="/download_lab_report/">
-                        {% csrf_token %}
-                        <input type="hidden" name="format" value="excel">
-                        <button type="submit" class="btn btn-outline"><i class="fas fa-file-excel"></i> Excel</button>
-                    </form>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
-            
-            <!-- Summary Stats for Labs -->
-            <div id="lab-summary-stats" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px;">
-                <div class="summary-card">
-                    <i class="fas fa-flask" style="font-size: 24px; color: #ff0000;"></i>
-                    <h3 id="total-labs-count" style="margin-top: 8px;">0</h3>
-                    <p style="font-size: 11px; color: #888;">Total Labs/Courses</p>
-                </div>
-                <div class="summary-card">
-                    <i class="fas fa-clock" style="font-size: 24px; color: #ff0000;"></i>
-                    <h3 id="total-lab-hours" style="margin-top: 8px;">0</h3>
-                    <p style="font-size: 11px; color: #888;">Total Lab Hours</p>
-                </div>
-                <div class="summary-card">
-                    <i class="fas fa-chart-line" style="font-size: 24px; color: #ff0000;"></i>
-                    <h3 id="avg-lab-utilization" style="margin-top: 8px;">0%</h3>
-                    <p style="font-size: 11px; color: #888;">Avg Utilization</p>
-                </div>
-            </div>
-            
-            <div class="table-container">
-                <table class="report-table" id="lab-report-table">
-                    <thead>
-                        <tr>
-                            <th>Lab/Course Code</th>
-                            <th>Course Name</th>
-                            <th class="lab-hours-col">Total Hours</th>
-                            <th>Sessions</th>
-                            <th class="lab-utilization-col">Utilization</th>
-                            <th>Days Used</th>
-                            <th>Schedule</th>
-                        </thead>
-                    <tbody>
-                        {% for lab in lab_report %}
-                        <tr>
-                            <td><strong>{{ lab.lab_code }}</strong></td>
-                            <td>{{ lab.lab_name }}</td>
-                            <td class="lab-hours-value">{{ lab.total_hours }} hrs</td>
-                            <td>{{ lab.sessions }}</td>
-                            <td class="lab-utilization-value">
-                                <div style="display: flex; align-items: center; gap: 8px;">
-                                    <div class="progress-bar">
-                                        <div class="progress-fill" data-lab-utilization="{{ lab.utilization_percentage }}" style="width: {{ lab.utilization_percentage }}%;"></div>
-                                    </div>
-                                    <span style="font-size: 12px;">{{ lab.utilization_percentage }}%</span>
-                                </div>
-                            </td>
-                            <td>
-                                {% for day in lab.days_used %}
-                                    <span class="capacity-badge" style="margin: 2px;">{{ day|slice:":3" }}</span>
-                                {% endfor %}
-                            </td>
-                            <td>
-                                {% for slot in lab.time_slots|slice:":3" %}
-                                    <div style="font-size: 11px;">{{ slot }}</div>
-                                {% endfor %}
-                                {% if lab.time_slots|length > 3 %}
-                                    <small style="color:#888;">+{{ lab.time_slots|length|add:"-3" }} more</small>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                {% endfor %}
             </div>
         </div>
         {% endif %}
@@ -1156,163 +1019,28 @@
             <meta charset="UTF-8">
             <title>TEMPOSYNK - Generated Timetable</title>
             <style>
-                * {
-                    margin: 0;
-                    padding: 0;
-                    box-sizing: border-box;
-                }
-                body {
-                    font-family: 'Segoe UI', 'Inter', Arial, sans-serif;
-                    margin: 0;
-                    padding: 40px;
-                    background: #ffffff;
-                    color: #333333;
-                    line-height: 1.5;
-                }
-                .document-container {
-                    max-width: 1200px;
-                    margin: 0 auto;
-                    background: white;
-                }
-                .header-section {
-                    text-align: center;
-                    margin-bottom: 40px;
-                    padding-bottom: 20px;
-                    border-bottom: 2px solid #ff0000;
-                }
-                .logo-container {
-                    margin-bottom: 15px;
-                }
-                .logo-image {
-                    max-width: 40px;
-                    max-height: 40px;
-                    width: auto;
-                    height: auto;
-                    object-fit: contain;
-                }
-                .college-name {
-                    font-size: 28px;
-                    font-weight: 700;
-                    color: #ff0000;
-                    margin: 10px 0 5px;
-                }
-                .document-title {
-                    font-size: 24px;
-                    font-weight: 600;
-                    color: #333;
-                    margin: 10px 0;
-                }
-                .meta-info {
-                    font-size: 12px;
-                    color: #666;
-                    margin-top: 15px;
-                }
-                .timetable-section {
-                    margin-bottom: 40px;
-                }
-                .section-title {
-                    font-size: 20px;
-                    font-weight: 600;
-                    margin: 25px 0 15px;
-                    padding-bottom: 8px;
-                    border-bottom: 2px solid #ff0000;
-                    color: #ff0000;
-                }
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    margin: 15px 0;
-                    font-size: 12px;
-                }
-                th {
-                    background: #ff0000;
-                    color: white;
-                    padding: 10px;
-                    border: 1px solid #ddd;
-                    font-weight: 600;
-                }
-                td {
-                    padding: 8px;
-                    border: 1px solid #ddd;
-                    text-align: center;
-                }
-                .time-col {
-                    background: #f9f9f9;
-                    font-weight: 600;
-                }
-                .lunch-cell {
-                    background: #fff3cd;
-                    color: #856404;
-                }
-                .free-cell {
-                    color: #999;
-                    font-style: italic;
-                }
-                .course-code {
-                    font-weight: 700;
-                    color: #ff0000;
-                }
-                .course-name {
-                    font-size: 10px;
-                    color: #666;
-                }
-                .prof-name {
-                    font-size: 9px;
-                    color: #888;
-                }
-                .report-table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    font-size: 11px;
-                }
-                .report-table th {
-                    background: #ff0000;
-                    color: white;
-                    padding: 8px;
-                    text-align: left;
-                }
-                .report-table td {
-                    padding: 8px;
-                    text-align: left;
-                    vertical-align: top;
-                }
-                .capacity-badge {
-                    background: #f0f0f0;
-                    padding: 2px 6px;
-                    border-radius: 4px;
-                    font-size: 10px;
-                }
-                .footer {
-                    margin-top: 40px;
-                    text-align: center;
-                    font-size: 10px;
-                    color: #999;
-                    padding-top: 20px;
-                    border-top: 1px solid #eee;
-                }
-                @media print {
-                    body {
-                        padding: 20px;
-                    }
-                    .no-print {
-                        display: none;
-                    }
-                }
+                * { margin: 0; padding: 0; box-sizing: border-box; }
+                body { font-family: 'Segoe UI', Arial, sans-serif; margin: 40px; background: white; color: #333; line-height: 1.5; }
+                .document-container { max-width: 1200px; margin: 0 auto; background: white; }
+                .header-section { text-align: center; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 2px solid #ff0000; }
+                .college-name { font-size: 28px; font-weight: 700; color: #ff0000; margin: 10px 0 5px; }
+                .document-title { font-size: 24px; font-weight: 600; color: #333; margin: 10px 0; }
+                .meta-info { font-size: 12px; color: #666; margin-top: 15px; }
+                .timetable-section { margin-bottom: 40px; }
+                .section-title { font-size: 20px; font-weight: 600; margin: 25px 0 15px; padding-bottom: 8px; border-bottom: 2px solid #ff0000; color: #ff0000; }
+                table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 12px; }
+                th { background: #ff0000; color: white; padding: 10px; border: 1px solid #ddd; font-weight: 600; }
+                td { padding: 8px; border: 1px solid #ddd; text-align: center; }
+                .time-col { background: #f9f9f9; font-weight: 600; }
+                .lunch-cell { background: #fff3cd; color: #856404; }
+                .free-cell { color: #999; font-style: italic; }
+                .footer { margin-top: 40px; text-align: center; font-size: 10px; color: #999; padding-top: 20px; border-top: 1px solid #eee; }
+                @media print { body { padding: 20px; } }
             </style>
         </head>
         <body>
             <div class="document-container">
-                <div class="header-section">`;
-        
-        // Add logo if uploaded
-        if (selectedLogo) {
-            html += `
-                    <div class="logo-container">
-                        <img src="${selectedLogo}" class="logo-image" alt="College Logo">
-                    </div>`;
-        }
-        
-        html += `
+                <div class="header-section">
                     <div class="college-name">${escapeHtml(collegeName)}</div>
                     <div class="document-title">TEMPOSYNK - Generated Timetable</div>
                     <div class="meta-info">
@@ -1335,33 +1063,19 @@
             }
         });
         
-        // Add faculty report if exists
-        const facultyReport = document.getElementById('faculty-report-section');
-        if (facultyReport) {
-            const facultyTitle = facultyReport.querySelector('.report-header h3')?.innerText || 'Faculty Workload Report';
-            const facultyTable = facultyReport.querySelector('#faculty-report-table');
-            if (facultyTable) {
+        // Add faculty timetables
+        const facultyCards = document.querySelectorAll('.faculty-card');
+        facultyCards.forEach((card) => {
+            const name = card.querySelector('.faculty-info h3')?.innerText || 'Faculty Timetable';
+            const table = card.querySelector('.faculty-timetable table');
+            if (table) {
                 html += `
                 <div class="timetable-section">
-                    <div class="section-title">${escapeHtml(facultyTitle)}</div>
-                    ${facultyTable.outerHTML}
+                    <div class="section-title">${escapeHtml(name)}</div>
+                    ${table.outerHTML}
                 </div>`;
             }
-        }
-        
-        // Add lab report if exists
-        const labReport = document.getElementById('lab-report-section');
-        if (labReport) {
-            const labTitle = labReport.querySelector('.report-header h3')?.innerText || 'Lab Utilization Report';
-            const labTable = labReport.querySelector('#lab-report-table');
-            if (labTable) {
-                html += `
-                <div class="timetable-section">
-                    <div class="section-title">${escapeHtml(labTitle)}</div>
-                    ${labTable.outerHTML}
-                </div>`;
-            }
-        }
+        });
         
         html += `
                 <div class="footer">
@@ -1382,38 +1096,6 @@
         return div.innerHTML;
     }
     
-    function generateCSV() {
-        const personName = document.getElementById('person_name').value.trim();
-        const collegeName = document.getElementById('college_name').value.trim();
-        
-        let csv = `"${collegeName}","TEMPOSYNK Generated Timetable"\n`;
-        csv += `"Generated for:","${personName}"\n`;
-        csv += `"Generated on:","${new Date().toLocaleString()}"\n\n`;
-        
-        // Add timetables
-        const timetableSections = document.querySelectorAll('.timetable-section');
-        timetableSections.forEach((section) => {
-            const title = section.querySelector('.timetable-title')?.innerText || 'Timetable';
-            csv += `"${title}"\n`;
-            
-            const table = section.querySelector('table');
-            if (table) {
-                const rows = table.querySelectorAll('tr');
-                rows.forEach(row => {
-                    const cells = row.querySelectorAll('th, td');
-                    const rowData = Array.from(cells).map(cell => {
-                        let text = cell.innerText.trim().replace(/\n/g, ' ');
-                        return `"${text.replace(/"/g, '""')}"`;
-                    });
-                    csv += rowData.join(',') + '\n';
-                });
-                csv += '\n';
-            }
-        });
-        
-        return csv;
-    }
-    
     function submitDownload() {
         const personName = document.getElementById('person_name').value.trim();
         const collegeName = document.getElementById('college_name').value.trim();
@@ -1424,7 +1106,6 @@
         }
         
         let html = generateProfessionalHTML();
-        let csv = generateCSV();
         
         document.getElementById('dl_html').value = html;
         document.getElementById('dl_format').value = currentFormat;
@@ -1434,99 +1115,9 @@
             document.getElementById('logo_data_input').value = selectedLogo;
         }
         
-        // For CSV format, handle separately
-        if (currentFormat === 'csv') {
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            const url = URL.createObjectURL(blob);
-            link.setAttribute('href', url);
-            link.setAttribute('download', `timetable_${personName.replace(/\s/g, '_')}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-            closeDownloadModal();
-        } else {
-            document.getElementById('downloadForm').submit();
-        }
-        
+        document.getElementById('downloadForm').submit();
         closeDownloadModal();
     }
-    
-    // Calculate faculty summary totals from table data
-    function calculateFacultySummary() {
-        const facultyRows = document.querySelectorAll('#faculty-report-table tbody tr');
-        let totalHours = 0;
-        let totalUtilization = 0;
-        let totalLabs = 0;
-        let facultyCount = facultyRows.length;
-        
-        facultyRows.forEach(row => {
-            const hoursCell = row.querySelector('.weekly-hours-cell');
-            if (hoursCell) {
-                const hoursText = hoursCell.innerText;
-                const hoursMatch = hoursText.match(/(\d+)/);
-                if (hoursMatch) totalHours += parseInt(hoursMatch[1]);
-            }
-            
-            const labsCell = row.querySelector('.labs-cell');
-            if (labsCell) {
-                const labsText = labsCell.innerText;
-                const labsMatch = labsText.match(/(\d+)/);
-                if (labsMatch) totalLabs += parseInt(labsMatch[1]);
-            }
-            
-            const utilCell = row.querySelector('.utilization-value');
-            if (utilCell) {
-                const utilText = utilCell.innerText;
-                const utilMatch = utilText.match(/(\d+\.?\d*)/);
-                if (utilMatch) totalUtilization += parseFloat(utilMatch[1]);
-            }
-        });
-        
-        const avgUtilization = facultyCount > 0 ? (totalUtilization / facultyCount).toFixed(1) : 0;
-        
-        document.getElementById('total-faculty').innerText = facultyCount;
-        document.getElementById('total-hours').innerText = totalHours;
-        document.getElementById('avg-utilization').innerText = avgUtilization + '%';
-        document.getElementById('total-labs').innerText = totalLabs;
-    }
-    
-    // Calculate lab summary totals
-    function calculateLabSummary() {
-        const labRows = document.querySelectorAll('#lab-report-table tbody tr');
-        let totalHours = 0;
-        let totalUtilization = 0;
-        let labCount = labRows.length;
-        
-        labRows.forEach(row => {
-            const hoursCell = row.querySelector('.lab-hours-value');
-            if (hoursCell) {
-                const hoursText = hoursCell.innerText;
-                const hoursMatch = hoursText.match(/(\d+)/);
-                if (hoursMatch) totalHours += parseInt(hoursMatch[1]);
-            }
-            
-            const utilCell = row.querySelector('.lab-utilization-value');
-            if (utilCell) {
-                const utilText = utilCell.innerText;
-                const utilMatch = utilText.match(/(\d+\.?\d*)/);
-                if (utilMatch) totalUtilization += parseFloat(utilMatch[1]);
-            }
-        });
-        
-        const avgUtilization = labCount > 0 ? (totalUtilization / labCount).toFixed(1) : 0;
-        
-        document.getElementById('total-labs-count').innerText = labCount;
-        document.getElementById('total-lab-hours').innerText = totalHours;
-        document.getElementById('avg-lab-utilization').innerText = avgUtilization + '%';
-    }
-    
-    // Run calculations when page loads
-    document.addEventListener('DOMContentLoaded', function() {
-        calculateFacultySummary();
-        calculateLabSummary();
-    });
     
     document.getElementById('logo_upload').addEventListener('change', handleLogoUpload);
     

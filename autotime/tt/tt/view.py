@@ -1,4 +1,5 @@
-## this is main file where  all the logic of timetable generation is implemented and all the reports are generated and stored in session to be displayed in output.html
+## MODIFIED: Individual Faculty Timetable Generation with NAME MERGING
+## Now combines all courses for same faculty name into ONE timetable
 
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, FileResponse
@@ -85,14 +86,12 @@ def generate(request):
     return render(request, 'generate.html', {'programs': programs, 'semesters': semesters})
 
 def output(request):
-    """Display generated timetable with faculty and lab reports"""
+    """Display generated timetable with individual faculty timetables"""
     schedules = request.session.get('schedule_results')
-    faculty_report = request.session.get('faculty_report')
-    lab_report = request.session.get('lab_report')
+    faculty_individual_timetables = request.session.get('faculty_individual_timetables', {})
     return render(request, 'output.html', {
         'schedules': schedules,
-        'faculty_report': faculty_report,
-        'lab_report': lab_report
+        'faculty_individual_timetables': faculty_individual_timetables
     })
 
 def view_course(request):
@@ -441,7 +440,7 @@ def callfaculty(request):
     return render(request, 'faculty.html', {"msg": msg})
 
 def generatepage(request):
-    """ROBUST Timetable Generation Algorithm with Reports"""
+    """ROBUST Timetable Generation Algorithm with MERGED Individual Faculty Timetables"""
     if request.method != 'POST':
         return HttpResponse(status=405)
 
@@ -513,31 +512,20 @@ def generatepage(request):
     
     schedules = {}
     
-    # Enhanced report data structures
-    faculty_workload = defaultdict(lambda: {
+    # NEW: Individual faculty timetable structure - MERGED BY NAME
+    # Key will be professor NAME instead of ID to merge multiple IDs
+    faculty_individual_timetables = defaultdict(lambda: {
         'name': '',
-        'id': '',
-        'total_hours': 0,
-        'weekly_hours': 0,
-        'courses': defaultdict(lambda: {'name': '', 'hours': 0, 'type': 'lecture'}),
-        'days': defaultdict(int),
-        'time_slots': defaultdict(list),
-        'labs_handled': 0,
-        'lectures_handled': 0,
-        'free_slots': 0,
-        'utilization_percentage': 0
-    })
-
-    lab_utilization = defaultdict(lambda: {
-        'lab_name': '',
-        'lab_code': '',
-        'total_hours': 0,
-        'sessions': 0,
-        'days_used': set(),
-        'time_slots': [],
-        'courses_conducted': defaultdict(int),
-        'utilization_percentage': 0,
-        'available_hours': 40
+        'ids': [],  # Store all professor IDs for this name
+        'schedule': [[{
+            'course': 'Free',
+            'course_name': '',
+            'time_slot': times[idx],
+            'day': day_name,
+            'day_index': day_idx
+        } for day_idx, day_name in enumerate(days)] for idx in range(len(times))],
+        'courses_taught': [],  # List of unique courses
+        'total_hours': 0
     })
     
     # ============ GENERATE TIMETABLE FOR EACH PROGRAM ============
@@ -567,7 +555,7 @@ def generatepage(request):
                 'course': course_code,
                 'name': course_name,
                 'professors': professors_by_course.get(course_code, []),
-                'is_lab': 'LAB' in course_code.upper()
+                'is_lab': 'LAB' in course_code.upper() or 'LAB' in course_name.upper()
             }
             
             for _ in range(int(frequency or 0)):
@@ -603,10 +591,8 @@ def generatepage(request):
             professor_daily_load = defaultdict(lambda: defaultdict(int))
             professor_schedule = defaultdict(set)
             
-            # Track lab requirements
-            lab_placements = []
-            
             # Place labs
+            lab_placements = []
             for course in lab_slots:
                 placed = False
                 attempts = 0
@@ -641,30 +627,36 @@ def generatepage(request):
                                         'prof_name': prof_name,
                                         'is_lab': True
                                     }
-                                    if prof_id:
+                                    if prof_id and prof_name:
                                         professor_schedule[(time_slot + offset, day)].add(prof_id)
                                         professor_daily_load[prof_id][day] += 1
                                         professor_workload[prof_id] += 1
                                         
-                                        faculty_workload[prof_id]['name'] = prof_name
-                                        faculty_workload[prof_id]['id'] = prof_id
-                                        faculty_workload[prof_id]['total_hours'] += 1
-                                        faculty_workload[prof_id]['weekly_hours'] += 1
-                                        faculty_workload[prof_id]['courses'][course['course']]['hours'] += 1
-                                        faculty_workload[prof_id]['courses'][course['course']]['name'] = course['name']
-                                        faculty_workload[prof_id]['courses'][course['course']]['type'] = 'lab'
-                                        faculty_workload[prof_id]['days'][days[day]] += 1
-                                        faculty_workload[prof_id]['time_slots'][days[day]].append(times[time_slot + offset])
+                                        # Update individual faculty timetable by NAME (merging)
+                                        faculty_individual_timetables[prof_name]['name'] = prof_name
+                                        if prof_id not in faculty_individual_timetables[prof_name]['ids']:
+                                            faculty_individual_timetables[prof_name]['ids'].append(prof_id)
                                         
-                                        faculty_workload[prof_id]['labs_handled'] += 1
-                                        
-                                        lab_utilization[course['course']]['lab_name'] = course['name']
-                                        lab_utilization[course['course']]['lab_code'] = course['course']
-                                        lab_utilization[course['course']]['total_hours'] += 1
-                                        lab_utilization[course['course']]['sessions'] += 1
-                                        lab_utilization[course['course']]['days_used'].add(days[day])
-                                        lab_utilization[course['course']]['time_slots'].append(f"{days[day]} {times[time_slot + offset]}")
-                                        lab_utilization[course['course']]['courses_conducted'][course['course']] += 1
+                                        # Only set if cell is free or this is a better assignment
+                                        current_cell = faculty_individual_timetables[prof_name]['schedule'][time_slot + offset][day]
+                                        if current_cell['course'] == 'Free' or current_cell['course'] == '':
+                                            faculty_individual_timetables[prof_name]['schedule'][time_slot + offset][day] = {
+                                                'course': course['course'],
+                                                'course_name': course['name'],
+                                                'prof': prof_id,
+                                                'prof_name': prof_name,
+                                                'is_lab': True,
+                                                'time_slot': times[time_slot + offset],
+                                                'day': days[day],
+                                                'day_index': day
+                                            }
+                                            if course['course'] not in [c['code'] for c in faculty_individual_timetables[prof_name]['courses_taught']]:
+                                                faculty_individual_timetables[prof_name]['courses_taught'].append({
+                                                    'code': course['course'],
+                                                    'name': course['name'],
+                                                    'type': 'Lab'
+                                                })
+                                            faculty_individual_timetables[prof_name]['total_hours'] += 1
                                 
                                 placed = True
                     
@@ -727,22 +719,35 @@ def generatepage(request):
                                 'is_lab': False
                             }
                             
-                            if prof_id:
+                            if prof_id and prof_name:
                                 professor_schedule[(time_slot, day)].add(prof_id)
                                 professor_daily_load[prof_id][day] += 1
                                 professor_workload[prof_id] += 1
                                 
-                                faculty_workload[prof_id]['name'] = prof_name
-                                faculty_workload[prof_id]['id'] = prof_id
-                                faculty_workload[prof_id]['total_hours'] += 1
-                                faculty_workload[prof_id]['weekly_hours'] += 1
-                                faculty_workload[prof_id]['courses'][course['course']]['hours'] += 1
-                                faculty_workload[prof_id]['courses'][course['course']]['name'] = course['name']
-                                faculty_workload[prof_id]['courses'][course['course']]['type'] = 'lecture'
-                                faculty_workload[prof_id]['days'][days[day]] += 1
-                                faculty_workload[prof_id]['time_slots'][days[day]].append(times[time_slot])
+                                # Update individual faculty timetable by NAME (merging)
+                                faculty_individual_timetables[prof_name]['name'] = prof_name
+                                if prof_id not in faculty_individual_timetables[prof_name]['ids']:
+                                    faculty_individual_timetables[prof_name]['ids'].append(prof_id)
                                 
-                                faculty_workload[prof_id]['lectures_handled'] += 1
+                                current_cell = faculty_individual_timetables[prof_name]['schedule'][time_slot][day]
+                                if current_cell['course'] == 'Free' or current_cell['course'] == '':
+                                    faculty_individual_timetables[prof_name]['schedule'][time_slot][day] = {
+                                        'course': course['course'],
+                                        'course_name': course['name'],
+                                        'prof': prof_id,
+                                        'prof_name': prof_name,
+                                        'is_lab': False,
+                                        'time_slot': times[time_slot],
+                                        'day': days[day],
+                                        'day_index': day
+                                    }
+                                    if course['course'] not in [c['code'] for c in faculty_individual_timetables[prof_name]['courses_taught']]:
+                                        faculty_individual_timetables[prof_name]['courses_taught'].append({
+                                            'code': course['course'],
+                                            'name': course['name'],
+                                            'type': 'Lecture'
+                                        })
+                                    faculty_individual_timetables[prof_name]['total_hours'] += 1
                             
                             course_index += 1
 
@@ -768,7 +773,8 @@ def generatepage(request):
             if absent_prof:
                 timetable = handle_absent_professor(
                     timetable, absent_prof, replacement_prof, 
-                    professors_by_course, all_professors, professor_schedule
+                    professors_by_course, all_professors, professor_schedule,
+                    faculty_individual_timetables, times, days
                 )
 
             # Optimize distribution
@@ -830,64 +836,45 @@ def generatepage(request):
             group_name = prog if group_count == 1 else f"{prog} (Group {group+1})"
             schedules[group_name] = {'matrix': matrix_with_times}
     
-    # Calculate utilization percentages
-    for prof_id, data in faculty_workload.items():
+    # Convert faculty_individual_timetables to regular dict for session
+    faculty_timetables_dict = {}
+    for prof_name, data in faculty_individual_timetables.items():
         if data['name']:
-            max_weekly_hours = 40
-            data['utilization_percentage'] = round((data['weekly_hours'] / max_weekly_hours) * 100, 1)
-            data['free_slots'] = max_weekly_hours - data['weekly_hours']
+            # Convert schedule to serializable format
+            serializable_schedule = []
+            for time_idx, time_slot in enumerate(data['schedule']):
+                serializable_row = []
+                for day_idx, cell in enumerate(time_slot):
+                    serializable_row.append({
+                        'course': cell.get('course', 'Free'),
+                        'course_name': cell.get('course_name', ''),
+                        'prof': cell.get('prof', ''),
+                        'prof_name': cell.get('prof_name', ''),
+                        'is_lab': cell.get('is_lab', False),
+                        'time_slot': times[time_idx] if time_idx < len(times) else '',
+                        'day': days[day_idx] if day_idx < len(days) else '',
+                        'day_index': day_idx
+                    })
+                serializable_schedule.append(serializable_row)
             
-            # Convert courses defaultdict to regular dict
-            data['courses'] = {k: {'name': v['name'], 'hours': v['hours'], 'type': v['type']} 
-                              for k, v in data['courses'].items()}
-            data['days'] = dict(data['days'])
-            data['time_slots'] = dict(data['time_slots'])
-
-    for lab_code, data in lab_utilization.items():
-        if data['lab_code']:
-            data['utilization_percentage'] = round((data['total_hours'] / data['available_hours']) * 100, 1)
-            data['days_used'] = list(data['days_used'])
-            data['courses_conducted'] = dict(data['courses_conducted'])
-    
-    # Prepare reports for session
-    faculty_report_data = []
-    for prof_id, data in faculty_workload.items():
-        if data['name']:
-            faculty_report_data.append({
-                'id': prof_id,
+            # Use first ID as primary (or join multiple)
+            primary_id = data['ids'][0] if data['ids'] else prof_name.replace(' ', '_')
+            
+            faculty_timetables_dict[primary_id] = {
                 'name': data['name'],
-                'total_hours': data['total_hours'],
-                'weekly_hours': data['weekly_hours'],
-                'utilization_percentage': data['utilization_percentage'],
-                'free_slots': data['free_slots'],
-                'lectures_handled': data['lectures_handled'],
-                'labs_handled': data['labs_handled'],
-                'courses': data['courses'],
-                'days': data['days'],
-                'time_slots': data['time_slots']
-            })
-
-    lab_report_data = []
-    for lab_code, data in lab_utilization.items():
-        if data['lab_code']:
-            lab_report_data.append({
-                'lab_code': lab_code,
-                'lab_name': data['lab_name'],
-                'total_hours': data['total_hours'],
-                'sessions': data['sessions'],
-                'utilization_percentage': data['utilization_percentage'],
-                'days_used': data['days_used'],
-                'time_slots': data['time_slots'][:10],
-                'courses_conducted': data['courses_conducted']
-            })
+                'id': primary_id,
+                'all_ids': data['ids'],
+                'schedule': serializable_schedule,
+                'courses_taught': data['courses_taught'],
+                'total_hours': data['total_hours']
+            }
     
     request.session['schedule_results'] = schedules
-    request.session['faculty_report'] = faculty_report_data
-    request.session['lab_report'] = lab_report_data
+    request.session['faculty_individual_timetables'] = faculty_timetables_dict
     
     return redirect('/output')
 
-def handle_absent_professor(timetable, absent_prof, replacement_prof, professors_by_course, all_professors, professor_schedule):
+def handle_absent_professor(timetable, absent_prof, replacement_prof, professors_by_course, all_professors, professor_schedule, faculty_timetables=None, times=None, days=None):
     """Intelligently handle absent professor"""
     
     for time_slot in range(8):
@@ -901,6 +888,22 @@ def handle_absent_professor(timetable, absent_prof, replacement_prof, professors
                     cell['prof'] = replacement_prof
                     cell['prof_name'] = all_professors[replacement_prof]
                     professor_schedule[(time_slot, day)].add(replacement_prof)
+                    
+                    # Update faculty timetable if provided
+                    if faculty_timetables and times and days:
+                        # Find by name
+                        replacement_name = all_professors[replacement_prof]
+                        if replacement_name in faculty_timetables:
+                            faculty_timetables[replacement_name]['schedule'][time_slot][day] = {
+                                'course': cell['course'],
+                                'course_name': get_course_name(cell['course']),
+                                'prof': replacement_prof,
+                                'prof_name': replacement_name,
+                                'is_lab': cell['is_lab'],
+                                'time_slot': times[time_slot],
+                                'day': days[day],
+                                'day_index': day
+                            }
                 
                 else:
                     course_code = cell['course']
@@ -916,6 +919,19 @@ def handle_absent_professor(timetable, absent_prof, replacement_prof, professors
                             cell['prof'] = available_prof['id']
                             cell['prof_name'] = available_prof['name']
                             professor_schedule[(time_slot, day)].add(available_prof['id'])
+                            
+                            if faculty_timetables and times and days:
+                                if available_prof['name'] in faculty_timetables:
+                                    faculty_timetables[available_prof['name']]['schedule'][time_slot][day] = {
+                                        'course': cell['course'],
+                                        'course_name': get_course_name(cell['course']),
+                                        'prof': available_prof['id'],
+                                        'prof_name': available_prof['name'],
+                                        'is_lab': cell['is_lab'],
+                                        'time_slot': times[time_slot],
+                                        'day': days[day],
+                                        'day_index': day
+                                    }
                         else:
                             cell['prof'] = ''
                             cell['prof_name'] = 'TBD'
@@ -984,6 +1000,7 @@ def replace_professor(request):
     absent = request.POST.get('absent_prof', '').strip()
     replacement = request.POST.get('replacement_prof', '').strip()
     schedules = request.session.get('schedule_results', {})
+    faculty_timetables = request.session.get('faculty_individual_timetables', {})
     
     if not schedules or not absent:
         return redirect('/output')
@@ -1000,6 +1017,7 @@ def replace_professor(request):
     
     prof_dict = {p[0]: p[1] for p in professors}
     
+    # Update main timetables
     for prog, data in schedules.items():
         matrix = data['matrix']
         for i in range(len(matrix)):
@@ -1016,88 +1034,269 @@ def replace_professor(request):
                             cell['display'] = f"{cell['course']}\n(Faculty Needed)"
     
     request.session['schedule_results'] = schedules
+    request.session['faculty_individual_timetables'] = faculty_timetables
     return redirect('/output')
 
-# ============ DOWNLOAD FUNCTIONS ============
-
-def download_faculty_report(request):
-    """Download faculty workload report"""
+def download_faculty_individual_timetable(request, faculty_id):
+    """Download individual faculty timetable in requested format"""
     if request.method != 'POST':
         return HttpResponse(status=405)
     
     fmt = request.POST.get('format', 'pdf').lower()
-    faculty_report = request.session.get('faculty_report', [])
+    faculty_timetables = request.session.get('faculty_individual_timetables', {})
     
-    if not faculty_report:
-        return HttpResponse('No faculty report available', status=400)
+    if faculty_id not in faculty_timetables:
+        return HttpResponse('Faculty timetable not found', status=400)
     
+    faculty = faculty_timetables[faculty_id]
+    
+    # Create HTML for download
+    times = ["09:30-10:30", "10:30-11:30", "11:30-12:25", "12:25-01:15", "01:15-02:00", "02:00-03:30", "03:30-04:30", "04:30-05:30"]
+    days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+    
+    html = f"""<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{faculty['name']} - Individual Timetable</title>
+        <style>
+            body {{ font-family: 'Segoe UI', Arial, sans-serif; margin: 40px; background: white; color: #333; }}
+            .header {{ text-align: center; margin-bottom: 40px; border-bottom: 2px solid #ff0000; padding-bottom: 20px; }}
+            .college-name {{ font-size: 24px; font-weight: bold; color: #ff0000; margin-bottom: 10px; }}
+            .title {{ font-size: 20px; font-weight: 600; margin: 10px 0; }}
+            .faculty-name {{ font-size: 18px; margin: 10px 0; }}
+            table {{ width: 100%; border-collapse: collapse; margin: 20px 0; }}
+            th {{ background: #ff0000; color: white; padding: 12px; border: 1px solid #ddd; }}
+            td {{ padding: 10px; border: 1px solid #ddd; text-align: center; }}
+            .time-col {{ background: #f5f5f5; font-weight: bold; }}
+            .lunch-cell {{ background: #fff3cd; color: #856404; }}
+            .free-cell {{ color: #999; font-style: italic; }}
+            .lab-cell {{ background: #e8f4f8; }}
+            .footer {{ margin-top: 40px; text-align: center; font-size: 12px; color: #666; border-top: 1px solid #eee; padding-top: 20px; }}
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <div class="college-name">DELHI TECHNICAL CAMPUS, Greater Noida</div>
+            <div class="title">Time Table (Even Session 2026-27)</div>
+            <div class="faculty-name">{faculty['name']} Individual Time Table</div>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Monday</th>
+                    <th>Tuesday</th>
+                    <th>Wednesday</th>
+                    <th>Thursday</th>
+                    <th>Friday</th>
+                </thead>
+            <tbody>"""
+    
+    for time_idx, time_slot in enumerate(times):
+        html += f"""<tr>
+            <td class="time-col">{time_slot}</td>"""
+        for day_idx in range(5):
+            if time_idx < len(faculty['schedule']) and day_idx < len(faculty['schedule'][time_idx]):
+                cell = faculty['schedule'][time_idx][day_idx]
+            else:
+                cell = {'course': 'Free', 'course_name': '', 'is_lab': False}
+            
+            course = cell.get('course', 'Free')
+            course_name = cell.get('course_name', '')
+            is_lab = cell.get('is_lab', False)
+            
+            if course == 'LUNCH':
+                html += f'<td class="lunch-cell">🍽️ LUNCH BREAK</td>'
+            elif course == 'Free' or course == '':
+                html += f'<td class="free-cell">—</td>'
+            else:
+                lab_class = 'lab-cell' if is_lab else ''
+                html += f'''<td class="{lab_class}">
+                    <strong>{course}</strong><br>
+                    <small>{course_name}</small>
+                </td>'''
+        html += '</tr>'
+    
+    html += f"""
+            </tbody>
+        </table>
+        
+        <div class="footer">
+            <p>Generated by TEMPOSYNK | Total Teaching Hours: {faculty['total_hours']} hrs/week</p>
+            <p>Courses: {', '.join([c['code'] + ' (' + c['type'] + ')' for c in faculty['courses_taught']])}</p>
+        </div>
+    </body>
+    </html>"""
+    
+    # Generate file based on format
+    if fmt in ('csv', 'text/csv'):
+        return generate_csv_from_faculty_timetable(faculty, times, days)
+    elif fmt in ('xls', 'xlsx', 'excel'):
+        return generate_excel_from_faculty_timetable(faculty, times, days)
+    elif fmt in ('doc', 'docx', 'word'):
+        return generate_word_from_faculty_timetable(faculty, times, days)
+    else:
+        # PDF
+        pdf = io.BytesIO()
+        try:
+            pisa_status = pisa.CreatePDF(src=html, dest=pdf)
+        except Exception:
+            return HttpResponse('PDF generation failed', status=500)
+        
+        if pisa_status.err:
+            return HttpResponse('Error generating PDF', status=500)
+        
+        pdf.seek(0)
+        filename = f"{faculty['name'].replace(' ', '_')}_Timetable.pdf"
+        return FileResponse(pdf, as_attachment=True, filename=filename, content_type='application/pdf')
+
+def generate_csv_from_faculty_timetable(faculty, times, days):
+    """Generate CSV from faculty timetable"""
+    import csv
+    output = io.StringIO()
+    writer = csv.writer(output)
+    
+    writer.writerow([f"DELHI TECHNICAL CAMPUS, Greater Noida"])
+    writer.writerow([f"Time Table (Even Session 2026-27)"])
+    writer.writerow([f"{faculty['name']} Individual Time Table"])
+    writer.writerow([])
+    
+    header = ['Time'] + days
+    writer.writerow(header)
+    
+    for time_idx, time_slot in enumerate(times):
+        row = [time_slot]
+        for day_idx in range(5):
+            if time_idx < len(faculty['schedule']) and day_idx < len(faculty['schedule'][time_idx]):
+                cell = faculty['schedule'][time_idx][day_idx]
+            else:
+                cell = {'course': 'Free'}
+            course = cell.get('course', 'Free')
+            if course == 'LUNCH':
+                row.append('LUNCH BREAK')
+            elif course == 'Free' or course == '':
+                row.append('Free')
+            else:
+                row.append(course)
+        writer.writerow(row)
+    
+    output.seek(0)
+    response = HttpResponse(output.getvalue(), content_type='text/csv')
+    filename = f"{faculty['name'].replace(' ', '_')}_Timetable.csv"
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+    return response
+
+def generate_excel_from_faculty_timetable(faculty, times, days):
+    """Generate Excel from faculty timetable"""
+    import pandas as pd
     data = []
-    for faculty in faculty_report:
-        courses_str = ', '.join([f"{c}({v['hours']}hrs)" for c, v in faculty['courses'].items()])
-        days_str = ', '.join([f"{d}({h})" for d, h in faculty['days'].items()])
-        data.append({
-            'Faculty ID': faculty['id'],
-            'Faculty Name': faculty['name'],
-            'Weekly Hours': faculty['weekly_hours'],
-            'Utilization %': faculty['utilization_percentage'],
-            'Free Slots': faculty['free_slots'],
-            'Lectures': faculty['lectures_handled'],
-            'Labs': faculty['labs_handled'],
-            'Courses': courses_str,
-            'Daily Distribution': days_str
-        })
+    for time_idx, time_slot in enumerate(times):
+        row = {'Time': time_slot}
+        for day_idx, day in enumerate(days):
+            if time_idx < len(faculty['schedule']) and day_idx < len(faculty['schedule'][time_idx]):
+                cell = faculty['schedule'][time_idx][day_idx]
+            else:
+                cell = {'course': 'Free'}
+            course = cell.get('course', 'Free')
+            if course == 'LUNCH':
+                row[day] = 'LUNCH BREAK'
+            elif course == 'Free' or course == '':
+                row[day] = 'Free'
+            else:
+                row[day] = course
+        data.append(row)
     
     df = pd.DataFrame(data)
-    
-    return generate_file_response(df, fmt, 'faculty_report')
+    bio = io.BytesIO()
+    with pd.ExcelWriter(bio, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False, sheet_name=faculty['name'][:31])
+    bio.seek(0)
+    filename = f"{faculty['name'].replace(' ', '_')}_Timetable.xlsx"
+    return FileResponse(bio, as_attachment=True, filename=filename, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
-def download_lab_report(request):
-    """Download lab utilization report"""
+def generate_word_from_faculty_timetable(faculty, times, days):
+    """Generate Word document from faculty timetable"""
+    doc = Document()
+    doc.add_heading('DELHI TECHNICAL CAMPUS, Greater Noida', 0)
+    doc.add_heading('Time Table (Even Session 2026-27)', 1)
+    doc.add_heading(f"{faculty['name']} Individual Time Table", 2)
+    
+    table = doc.add_table(rows=1, cols=6)
+    table.style = 'Table Grid'
+    hdr_cells = table.rows[0].cells
+    hdr_cells[0].text = 'Time'
+    for i, day in enumerate(days):
+        hdr_cells[i + 1].text = day
+    
+    for time_idx, time_slot in enumerate(times):
+        row_cells = table.add_row().cells
+        row_cells[0].text = time_slot
+        for day_idx in range(5):
+            if time_idx < len(faculty['schedule']) and day_idx < len(faculty['schedule'][time_idx]):
+                cell = faculty['schedule'][time_idx][day_idx]
+            else:
+                cell = {'course': 'Free'}
+            course = cell.get('course', 'Free')
+            if course == 'LUNCH':
+                row_cells[day_idx + 1].text = 'LUNCH BREAK'
+            elif course == 'Free' or course == '':
+                row_cells[day_idx + 1].text = 'Free'
+            else:
+                row_cells[day_idx + 1].text = course
+    
+    bio = io.BytesIO()
+    doc.save(bio)
+    bio.seek(0)
+    filename = f"{faculty['name'].replace(' ', '_')}_Timetable.docx"
+    return FileResponse(bio, as_attachment=True, filename=filename, content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+
+def download_timetable(request):
+    """Download main timetable in various formats"""
     if request.method != 'POST':
         return HttpResponse(status=405)
     
     fmt = request.POST.get('format', 'pdf').lower()
-    lab_report = request.session.get('lab_report', [])
+    html = request.POST.get('html', '')
+    person_name = request.POST.get('person_name', 'User')
+    college_name = request.POST.get('college_name', 'College')
+    logo_data = request.POST.get('logo_data', '')
     
-    if not lab_report:
-        return HttpResponse('No lab report available', status=400)
+    if not html:
+        return HttpResponse('No HTML provided', status=400)
     
-    data = []
-    for lab in lab_report:
-        data.append({
-            'Lab/Course Code': lab['lab_code'],
-            'Course Name': lab['lab_name'],
-            'Total Hours': lab['total_hours'],
-            'Sessions': lab['sessions'],
-            'Utilization %': lab['utilization_percentage'],
-            'Days Used': ', '.join(lab['days_used']),
-            'Schedule': ', '.join(lab['time_slots'][:5])
-        })
+    try:
+        dfs = pd.read_html(html)
+    except Exception:
+        dfs = []
     
-    df = pd.DataFrame(data)
+    if not dfs:
+        return HttpResponse('No table found', status=400)
     
-    return generate_file_response(df, fmt, 'lab_report')
-
-def generate_file_response(df, fmt, filename_prefix):
-    """Generate file response in requested format"""
+    df = dfs[0]
     
     if fmt in ('csv', 'text/csv'):
         bio = io.BytesIO()
         bio.write(df.to_csv(index=False).encode('utf-8'))
         bio.seek(0)
-        return FileResponse(bio, as_attachment=True, filename=f'{filename_prefix}.csv', content_type='text/csv')
+        return FileResponse(bio, as_attachment=True, filename='timetable.csv', content_type='text/csv')
     
     if fmt in ('xls', 'xlsx', 'excel'):
         bio = io.BytesIO()
         with pd.ExcelWriter(bio, engine='openpyxl') as writer:
-            df.to_excel(writer, index=False, sheet_name=filename_prefix)
+            df.to_excel(writer, index=False, sheet_name='Timetable')
         bio.seek(0)
-        return FileResponse(bio, as_attachment=True, filename=f'{filename_prefix}.xlsx', 
+        return FileResponse(bio, as_attachment=True, filename='timetable.xlsx', 
                           content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     
     if fmt in ('doc', 'docx', 'word'):
         doc = Document()
-        doc.add_heading(f'{filename_prefix.replace("_", " ").title()}', 0)
+        doc.add_heading(f'{college_name}', 0)
+        doc.add_heading('TEMPOSYNK - Generated Timetable', 1)
+        doc.add_paragraph(f'Generated for: {person_name}')
+        doc.add_paragraph(f'Generated on: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
+        doc.add_paragraph('')
         
         table = doc.add_table(rows=1, cols=len(df.columns))
         hdr_cells = table.rows[0].cells
@@ -1112,10 +1311,9 @@ def generate_file_response(df, fmt, filename_prefix):
         bio = io.BytesIO()
         doc.save(bio)
         bio.seek(0)
-        return FileResponse(bio, as_attachment=True, filename=f'{filename_prefix}.docx',
+        return FileResponse(bio, as_attachment=True, filename='timetable.docx',
                           content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
     
-    html = df.to_html()
     pdf = io.BytesIO()
     try:
         pisa_status = pisa.CreatePDF(src=html, dest=pdf)
@@ -1126,7 +1324,7 @@ def generate_file_response(df, fmt, filename_prefix):
         return HttpResponse('Error generating PDF', status=500)
     
     pdf.seek(0)
-    return FileResponse(pdf, as_attachment=True, filename=f'{filename_prefix}.pdf', content_type='application/pdf')
+    return FileResponse(pdf, as_attachment=True, filename='timetable.pdf', content_type='application/pdf')
 
 # View functions
 def callview_program(request):
@@ -1370,77 +1568,3 @@ def delete_labroom(request):
         dbe.close()
     
     return render(request, 'view_labRoom.html', {"labs": labs, "msg": msg})
-
-def download_timetable(request):
-    """Download timetable in various formats"""
-    if request.method != 'POST':
-        return HttpResponse(status=405)
-    
-    fmt = request.POST.get('format', 'pdf').lower()
-    html = request.POST.get('html', '')
-    person_name = request.POST.get('person_name', 'User')
-    college_name = request.POST.get('college_name', 'College')
-    logo_data = request.POST.get('logo_data', '')
-    
-    if not html:
-        return HttpResponse('No HTML provided', status=400)
-    
-    try:
-        dfs = pd.read_html(html)
-    except Exception:
-        dfs = []
-    
-    if not dfs:
-        return HttpResponse('No table found', status=400)
-    
-    df = dfs[0]
-    
-    if fmt in ('csv', 'text/csv'):
-        bio = io.BytesIO()
-        bio.write(df.to_csv(index=False).encode('utf-8'))
-        bio.seek(0)
-        return FileResponse(bio, as_attachment=True, filename='timetable.csv', content_type='text/csv')
-    
-    if fmt in ('xls', 'xlsx', 'excel'):
-        bio = io.BytesIO()
-        with pd.ExcelWriter(bio, engine='openpyxl') as writer:
-            df.to_excel(writer, index=False, sheet_name='Timetable')
-        bio.seek(0)
-        return FileResponse(bio, as_attachment=True, filename='timetable.xlsx', 
-                          content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    
-    if fmt in ('doc', 'docx', 'word'):
-        doc = Document()
-        doc.add_heading(f'{college_name}', 0)
-        doc.add_heading('TEMPOSYNK - Generated Timetable', 1)
-        doc.add_paragraph(f'Generated for: {person_name}')
-        doc.add_paragraph(f'Generated on: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
-        doc.add_paragraph('')
-        
-        table = doc.add_table(rows=1, cols=len(df.columns))
-        hdr_cells = table.rows[0].cells
-        for i, col in enumerate(df.columns):
-            hdr_cells[i].text = str(col)
-        
-        for _, row in df.iterrows():
-            row_cells = table.add_row().cells
-            for i, val in enumerate(row):
-                row_cells[i].text = str(val)
-        
-        bio = io.BytesIO()
-        doc.save(bio)
-        bio.seek(0)
-        return FileResponse(bio, as_attachment=True, filename='timetable.docx',
-                          content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
-    
-    pdf = io.BytesIO()
-    try:
-        pisa_status = pisa.CreatePDF(src=html, dest=pdf)
-    except Exception:
-        return HttpResponse('PDF generation failed', status=500)
-    
-    if pisa_status.err:
-        return HttpResponse('Error generating PDF', status=500)
-    
-    pdf.seek(0)
-    return FileResponse(pdf, as_attachment=True, filename='timetable.pdf', content_type='application/pdf')
