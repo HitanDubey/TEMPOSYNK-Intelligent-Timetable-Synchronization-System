@@ -1,5 +1,6 @@
 ## MODIFIED: Individual Faculty Timetable Generation with NAME MERGING
 ## Now combines all courses for same faculty name into ONE timetable
+## ADDED: Weekly Lab Report showing ALL faculty from department with their lab schedules
 
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, FileResponse
@@ -86,12 +87,14 @@ def generate(request):
     return render(request, 'generate.html', {'programs': programs, 'semesters': semesters})
 
 def output(request):
-    """Display generated timetable with individual faculty timetables"""
+    """Display generated timetable with individual faculty timetables and lab reports"""
     schedules = request.session.get('schedule_results')
     faculty_individual_timetables = request.session.get('faculty_individual_timetables', {})
+    lab_reports = request.session.get('lab_reports', {})
     return render(request, 'output.html', {
         'schedules': schedules,
-        'faculty_individual_timetables': faculty_individual_timetables
+        'faculty_individual_timetables': faculty_individual_timetables,
+        'lab_reports': lab_reports
     })
 
 def view_course(request):
@@ -440,7 +443,7 @@ def callfaculty(request):
     return render(request, 'faculty.html', {"msg": msg})
 
 def generatepage(request):
-    """ROBUST Timetable Generation Algorithm with MERGED Individual Faculty Timetables"""
+    """ROBUST Timetable Generation Algorithm with MERGED Individual Faculty Timetables and WEEKLY LAB REPORT for ALL FACULTY"""
     if request.method != 'POST':
         return HttpResponse(status=405)
 
@@ -491,6 +494,14 @@ def generatepage(request):
             })
             professor_courses[prof_id].append(course_code)
 
+    # Get lab rooms for lab report
+    cmd.execute("SELECT Lab_id, Lab_capacity FROM Lab ORDER BY Lab_id")
+    lab_rooms = cmd.fetchall()
+    
+    # Get lecture rooms
+    cmd.execute("SELECT lecture_id, lecture_capacity FROM Lecture ORDER BY lecture_id")
+    lecture_rooms = cmd.fetchall()
+
     dbe.close()
 
     # ============ TIME SLOTS WITH LUNCH BREAK ============
@@ -513,10 +524,9 @@ def generatepage(request):
     schedules = {}
     
     # NEW: Individual faculty timetable structure - MERGED BY NAME
-    # Key will be professor NAME instead of ID to merge multiple IDs
     faculty_individual_timetables = defaultdict(lambda: {
         'name': '',
-        'ids': [],  # Store all professor IDs for this name
+        'ids': [],
         'schedule': [[{
             'course': 'Free',
             'course_name': '',
@@ -524,9 +534,12 @@ def generatepage(request):
             'day': day_name,
             'day_index': day_idx
         } for day_idx, day_name in enumerate(days)] for idx in range(len(times))],
-        'courses_taught': [],  # List of unique courses
+        'courses_taught': [],
         'total_hours': 0
     })
+    
+    # NEW: Weekly Lab Reports for each program (shows ALL faculty)
+    lab_reports = {}
     
     # ============ GENERATE TIMETABLE FOR EACH PROGRAM ============
     for prog in progs:
@@ -566,6 +579,102 @@ def generatepage(request):
 
         random.shuffle(lecture_slots)
         random.shuffle(lab_slots)
+
+        # ============ GENERATE WEEKLY LAB REPORT FOR THIS PROGRAM (ALL FACULTY) ============
+        # Collect ALL lab courses for this program/semester with their faculty
+        all_lab_entries = []
+        for course in courses:
+            course_code = course[0]
+            course_name = course[1]
+            if 'LAB' in course_code.upper() or 'LAB' in course_name.upper():
+                lab_faculty = professors_by_course.get(course_code, [])
+                for faculty_member in lab_faculty:
+                    all_lab_entries.append({
+                        'code': course_code,
+                        'name': course_name,
+                        'faculty_id': faculty_member['id'],
+                        'faculty_name': faculty_member['name']
+                    })
+        
+        # Get department from program name
+        department = prog.split()[0] if prog.split() else prog
+        if '-' in department:
+            department = department.split('-')[0]
+        
+        # Create a schedule for each day - list of lab sessions
+        weekly_lab_schedule = {
+            'Monday': [],
+            'Tuesday': [],
+            'Wednesday': [],
+            'Thursday': [],
+            'Friday': []
+        }
+        
+        # Time slots for labs (avoid lunch hour at index 4)
+        lab_time_slots = [0, 1, 2, 3, 5, 6, 7]
+        
+        # Group lab entries by faculty
+        faculty_lab_map = defaultdict(list)
+        for entry in all_lab_entries:
+            faculty_lab_map[entry['faculty_name']].append(entry)
+        
+        # Get all unique faculty names
+        all_faculty_names = list(faculty_lab_map.keys())
+        random.shuffle(all_faculty_names)
+        
+        # Track used time slots per day to avoid conflicts
+        used_slots_per_day = {day: [] for day in weekly_lab_schedule.keys()}
+        
+        faculty_idx = 0
+        for day in weekly_lab_schedule.keys():
+            # Assign 2-3 faculty lab sessions per day
+            remaining_faculty = len(all_faculty_names) - faculty_idx
+            num_sessions = min(random.randint(2, 4), remaining_faculty) if remaining_faculty > 0 else 0
+            
+            for i in range(num_sessions):
+                if faculty_idx < len(all_faculty_names):
+                    fac_name = all_faculty_names[faculty_idx]
+                    fac_entries = faculty_lab_map[fac_name]
+                    
+                    # Choose a time slot not used yet for this day
+                    available_slots = [ts for ts in lab_time_slots if ts not in used_slots_per_day[day]]
+                    if not available_slots:
+                        available_slots = lab_time_slots
+                    
+                    time_slot_idx = random.choice(available_slots)
+                    used_slots_per_day[day].append(time_slot_idx)
+                    
+                    # Pick a lab course for this faculty
+                    lab_entry = random.choice(fac_entries)
+                    
+                    # Assign lab room
+                    lab_room = lab_rooms[faculty_idx % len(lab_rooms)][0] if lab_rooms else "Lab-101"
+                    
+                    weekly_lab_schedule[day].append({
+                        'faculty_name': fac_name,
+                        'faculty_id': lab_entry['faculty_id'],
+                        'course_code': lab_entry['code'],
+                        'course_name': lab_entry['name'],
+                        'lab_room': lab_room,
+                        'time_slot': times[time_slot_idx],
+                        'time_slot_idx': time_slot_idx
+                    })
+                    faculty_idx += 1
+        
+        # Create lab report structure
+        lab_report = {
+            'program_name': prog,
+            'department': department,
+            'semester': semester,
+            'all_faculty': all_faculty_names,
+            'faculty_details': {name: [{'code': e['code'], 'name': e['name']} for e in entries] for name, entries in faculty_lab_map.items()},
+            'lab_rooms': lab_rooms,
+            'weekly_schedule': weekly_lab_schedule,
+            'time_slots': times,
+            'days': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+        }
+        
+        lab_reports[prog] = lab_report
 
         # ============ GENERATE TIMETABLE FOR EACH GROUP ============
         for group in range(group_count):
@@ -637,7 +746,6 @@ def generatepage(request):
                                         if prof_id not in faculty_individual_timetables[prof_name]['ids']:
                                             faculty_individual_timetables[prof_name]['ids'].append(prof_id)
                                         
-                                        # Only set if cell is free or this is a better assignment
                                         current_cell = faculty_individual_timetables[prof_name]['schedule'][time_slot + offset][day]
                                         if current_cell['course'] == 'Free' or current_cell['course'] == '':
                                             faculty_individual_timetables[prof_name]['schedule'][time_slot + offset][day] = {
@@ -840,7 +948,6 @@ def generatepage(request):
     faculty_timetables_dict = {}
     for prof_name, data in faculty_individual_timetables.items():
         if data['name']:
-            # Convert schedule to serializable format
             serializable_schedule = []
             for time_idx, time_slot in enumerate(data['schedule']):
                 serializable_row = []
@@ -857,7 +964,6 @@ def generatepage(request):
                     })
                 serializable_schedule.append(serializable_row)
             
-            # Use first ID as primary (or join multiple)
             primary_id = data['ids'][0] if data['ids'] else prof_name.replace(' ', '_')
             
             faculty_timetables_dict[primary_id] = {
@@ -871,6 +977,7 @@ def generatepage(request):
     
     request.session['schedule_results'] = schedules
     request.session['faculty_individual_timetables'] = faculty_timetables_dict
+    request.session['lab_reports'] = lab_reports
     
     return redirect('/output')
 
@@ -889,9 +996,7 @@ def handle_absent_professor(timetable, absent_prof, replacement_prof, professors
                     cell['prof_name'] = all_professors[replacement_prof]
                     professor_schedule[(time_slot, day)].add(replacement_prof)
                     
-                    # Update faculty timetable if provided
                     if faculty_timetables and times and days:
-                        # Find by name
                         replacement_name = all_professors[replacement_prof]
                         if replacement_name in faculty_timetables:
                             faculty_timetables[replacement_name]['schedule'][time_slot][day] = {
@@ -1050,7 +1155,6 @@ def download_faculty_individual_timetable(request, faculty_id):
     
     faculty = faculty_timetables[faculty_id]
     
-    # Create HTML for download
     times = ["09:30-10:30", "10:30-11:30", "11:30-12:25", "12:25-01:15", "01:15-02:00", "02:00-03:30", "03:30-04:30", "04:30-05:30"]
     days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
     
@@ -1130,7 +1234,6 @@ def download_faculty_individual_timetable(request, faculty_id):
     </body>
     </html>"""
     
-    # Generate file based on format
     if fmt in ('csv', 'text/csv'):
         return generate_csv_from_faculty_timetable(faculty, times, days)
     elif fmt in ('xls', 'xlsx', 'excel'):
@@ -1138,7 +1241,6 @@ def download_faculty_individual_timetable(request, faculty_id):
     elif fmt in ('doc', 'docx', 'word'):
         return generate_word_from_faculty_timetable(faculty, times, days)
     else:
-        # PDF
         pdf = io.BytesIO()
         try:
             pisa_status = pisa.CreatePDF(src=html, dest=pdf)

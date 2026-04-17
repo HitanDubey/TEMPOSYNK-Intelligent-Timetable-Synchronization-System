@@ -341,7 +341,7 @@
             margin-top: 4px;
         }
 
-        /* Faculty Timetable Cards - Matching Excel Format */
+        /* Faculty Timetable Cards */
         .faculty-section {
             margin-top: 60px;
         }
@@ -465,6 +465,234 @@
             color: #aaa;
             display: block;
             margin-top: 2px;
+        }
+
+        /* ============ WEEKLY LAB REPORT SECTION ============ */
+        .lab-report-section {
+            margin-top: 80px;
+        }
+        
+        .lab-report-section-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .lab-report-section-title .highlight {
+            color: #ff0000;
+        }
+        
+        .lab-report-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+        
+        .lab-report-card {
+            background: rgba(10, 10, 10, 0.95);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .lab-report-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 0, 0, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+        
+        .lab-report-header {
+            background: linear-gradient(135deg, rgba(255, 0, 0, 0.15), rgba(0, 0, 0, 0.3));
+            padding: 25px 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .lab-report-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .lab-report-title h3 {
+            font-size: 22px;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .lab-report-title p {
+            color: #ff8888;
+            font-size: 13px;
+            margin: 0;
+            margin-left: auto;
+        }
+        
+        .lab-room-info {
+            padding: 15px 30px;
+            background: rgba(255, 0, 0, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .room-badge {
+            display: inline-block;
+            background: rgba(255, 0, 0, 0.15);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #ff8888;
+        }
+        
+        .room-badge i {
+            margin-right: 8px;
+            color: #ff0000;
+        }
+        
+        .lab-report-table-container {
+            padding: 20px 30px;
+            overflow-x: auto;
+        }
+        
+        .lab-report-table {
+            min-width: 1000px;
+            font-size: 12px;
+        }
+        
+        .lab-report-table th {
+            background: rgba(255, 0, 0, 0.1);
+            padding: 12px 8px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .lab-report-table td {
+            padding: 10px 8px;
+            vertical-align: top;
+            min-width: 100px;
+        }
+        
+        .day-col {
+            font-weight: 700;
+            color: #ff0000;
+            background: rgba(255, 0, 0, 0.05);
+        }
+        
+        .lunch-time-cell {
+            background: rgba(255, 0, 0, 0.08);
+            color: #ff8888;
+            font-weight: 500;
+        }
+        
+        .lab-session {
+            background: rgba(0, 100, 200, 0.15);
+            padding: 8px;
+            border-radius: 8px;
+            margin: 4px 0;
+        }
+        
+        .lab-session:first-child {
+            margin-top: 0;
+        }
+        
+        .lab-session:last-child {
+            margin-bottom: 0;
+        }
+        
+        .lab-session strong {
+            font-size: 12px;
+            color: #ff6666;
+            display: block;
+        }
+        
+        .lab-session .faculty-name {
+            font-size: 11px;
+            color: #88ff88;
+            display: block;
+            margin-top: 3px;
+            font-weight: 500;
+        }
+        
+        .lab-session .course-name-small {
+            font-size: 10px;
+            color: #aaa;
+            display: block;
+            margin-top: 2px;
+        }
+        
+        .lab-room-tag {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 9px;
+            margin-top: 4px;
+            color: #88ff88;
+        }
+        
+        .lab-report-footer {
+            padding: 20px 30px;
+            background: rgba(0, 0, 0, 0.3);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .lab-courses-list {
+            font-size: 12px;
+            color: #aaa;
+        }
+        
+        .lab-courses-list i {
+            color: #ff0000;
+            margin-right: 8px;
+        }
+        
+        .lab-course-tag {
+            display: inline-block;
+            background: rgba(255, 0, 0, 0.1);
+            padding: 4px 10px;
+            border-radius: 15px;
+            margin: 3px 5px;
+            font-size: 11px;
+            color: #ff8888;
+        }
+        
+        .faculty-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .faculty-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0, 100, 200, 0.2);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            color: #88ff88;
+        }
+        
+        .faculty-tag i {
+            font-size: 10px;
+            color: #ff0000;
+        }
+        
+        .lab-faculty-note {
+            font-size: 11px;
+            color: #888;
+        }
+        
+        .lab-faculty-note i {
+            color: #ff0000;
+            margin-right: 5px;
         }
 
         .no-data {
@@ -670,6 +898,19 @@
             .faculty-grid {
                 grid-template-columns: 1fr;
             }
+            .lab-report-header {
+                padding: 20px;
+            }
+            .lab-report-title h3 {
+                font-size: 18px;
+            }
+            .lab-report-table-container {
+                padding: 15px;
+            }
+            .lab-report-footer {
+                flex-direction: column;
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -866,7 +1107,7 @@
             {% endif %}
         {% endfor %}
 
-        <!-- INDIVIDUAL FACULTY TIMETABLES - EXACTLY LIKE YOUR EXCEL -->
+        <!-- INDIVIDUAL FACULTY TIMETABLES -->
         {% if faculty_individual_timetables and faculty_individual_timetables|length > 0 %}
         <div class="faculty-section">
             <h2 class="faculty-section-title">Faculty <span class="highlight">Individual Timetables</span></h2>
@@ -955,6 +1196,139 @@
         </div>
         {% endif %}
 
+        <!-- ============ WEEKLY LAB REPORT - WITH FACULTY AND TIMINGS ============ -->
+        {% if lab_reports and lab_reports|length > 0 %}
+        <div class="lab-report-section">
+            <h2 class="lab-report-section-title">📋 Weekly Lab <span class="highlight">Reports</span></h2>
+            <div class="lab-report-grid">
+                {% for prog, report in lab_reports.items %}
+                <div class="lab-report-card" id="lab-report-{{ forloop.counter }}">
+                    <div class="lab-report-header">
+                        <div class="lab-report-title">
+                            <i class="fas fa-flask" style="color:#ff0000; font-size:24px;"></i>
+                            <h3>Lab Report : {{ report.program_name }} ({{ report.department }} Department)</h3>
+                            <p>Semester: {{ report.semester }} | w.e.f : {% now "d.m.Y" %}</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Lab Room Information -->
+                    <div class="lab-room-info">
+                        <div class="room-badge">
+                            <i class="fas fa-door-open"></i> Lab Rooms: 
+                            {% for room in report.lab_rooms|slice:":3" %}
+                                {{ room.0 }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <!-- Weekly Lab Schedule Table -->
+                    <div class="lab-report-table-container">
+                        <table class="lab-report-table">
+                            <thead>
+                                <tr>
+                                    <th>Day / Time</th>
+                                    <th>9:30-10:30</th>
+                                    <th>10:30-11:30</th>
+                                    <th>11:30-12:25</th>
+                                    <th>12:25-1:20</th>
+                                    <th>1:20-2:00</th>
+                                    <th>2:00-2:50</th>
+                                    <th>2:50-3:40</th>
+                                    <th>3:40-4:30</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Monday -->
+                                <tr>
+                                    <td class="day-col"><strong>Monday</strong></td>
+                                    <td>{% for lab in report.weekly_schedule.Monday %}{% if lab.time_slot_idx == 0 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                    <td>{% for lab in report.weekly_schedule.Monday %}{% if lab.time_slot_idx == 1 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                    <td>{% for lab in report.weekly_schedule.Monday %}{% if lab.time_slot_idx == 2 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                    <td>{% for lab in report.weekly_schedule.Monday %}{% if lab.time_slot_idx == 3 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                    <td class="lunch-time-cell">🍽️ LUNCH</td>
+                                    <td>{% for lab in report.weekly_schedule.Monday %}{% if lab.time_slot_idx == 5 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                    <td>{% for lab in report.weekly_schedule.Monday %}{% if lab.time_slot_idx == 6 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                    <td>{% for lab in report.weekly_schedule.Monday %}{% if lab.time_slot_idx == 7 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                </tr>
+                                <!-- Tuesday -->
+                                <tr>
+                                    <td class="day-col"><strong>Tuesday</strong></td>
+                                    <td>{% for lab in report.weekly_schedule.Tuesday %}{% if lab.time_slot_idx == 0 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                    <td>{% for lab in report.weekly_schedule.Tuesday %}{% if lab.time_slot_idx == 1 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                    <td>{% for lab in report.weekly_schedule.Tuesday %}{% if lab.time_slot_idx == 2 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                    <td>{% for lab in report.weekly_schedule.Tuesday %}{% if lab.time_slot_idx == 3 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                    <td class="lunch-time-cell">🍽️ LUNCH</td>
+                                    <td>{% for lab in report.weekly_schedule.Tuesday %}{% if lab.time_slot_idx == 5 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                    <td>{% for lab in report.weekly_schedule.Tuesday %}{% if lab.time_slot_idx == 6 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                    <td>{% for lab in report.weekly_schedule.Tuesday %}{% if lab.time_slot_idx == 7 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                </tr>
+                                <!-- Wednesday -->
+                                <tr>
+                                    <td class="day-col"><strong>Wednesday</strong></td>
+                                    <td>{% for lab in report.weekly_schedule.Wednesday %}{% if lab.time_slot_idx == 0 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                    <td>{% for lab in report.weekly_schedule.Wednesday %}{% if lab.time_slot_idx == 1 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                    <td>{% for lab in report.weekly_schedule.Wednesday %}{% if lab.time_slot_idx == 2 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                    <td>{% for lab in report.weekly_schedule.Wednesday %}{% if lab.time_slot_idx == 3 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                    <td class="lunch-time-cell">🍽️ LUNCH</td>
+                                    <td>{% for lab in report.weekly_schedule.Wednesday %}{% if lab.time_slot_idx == 5 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                    <td>{% for lab in report.weekly_schedule.Wednesday %}{% if lab.time_slot_idx == 6 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                    <td>{% for lab in report.weekly_schedule.Wednesday %}{% if lab.time_slot_idx == 7 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                </tr>
+                                <!-- Thursday -->
+                                <tr>
+                                    <td class="day-col"><strong>Thursday</strong></td>
+                                    <td>{% for lab in report.weekly_schedule.Thursday %}{% if lab.time_slot_idx == 0 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                    <td>{% for lab in report.weekly_schedule.Thursday %}{% if lab.time_slot_idx == 1 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                    <td>{% for lab in report.weekly_schedule.Thursday %}{% if lab.time_slot_idx == 2 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                    <td>{% for lab in report.weekly_schedule.Thursday %}{% if lab.time_slot_idx == 3 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                    <td class="lunch-time-cell">🍽️ LUNCH</td>
+                                    <td>{% for lab in report.weekly_schedule.Thursday %}{% if lab.time_slot_idx == 5 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                    <td>{% for lab in report.weekly_schedule.Thursday %}{% if lab.time_slot_idx == 6 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                    <td>{% for lab in report.weekly_schedule.Thursday %}{% if lab.time_slot_idx == 7 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                </tr>
+                                <!-- Friday -->
+                                <tr>
+                                    <td class="day-col"><strong>Friday</strong></td>
+                                    <td>{% for lab in report.weekly_schedule.Friday %}{% if lab.time_slot_idx == 0 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                    <td>{% for lab in report.weekly_schedule.Friday %}{% if lab.time_slot_idx == 1 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                    <td>{% for lab in report.weekly_schedule.Friday %}{% if lab.time_slot_idx == 2 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                    <td>{% for lab in report.weekly_schedule.Friday %}{% if lab.time_slot_idx == 3 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                    <td class="lunch-time-cell">🍽️ LUNCH</td>
+                                    <td>{% for lab in report.weekly_schedule.Friday %}{% if lab.time_slot_idx == 5 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                    <td>{% for lab in report.weekly_schedule.Friday %}{% if lab.time_slot_idx == 6 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                    <td>{% for lab in report.weekly_schedule.Friday %}{% if lab.time_slot_idx == 7 %}<div class="lab-session"><strong>{{ lab.course_code }}</strong><span class="faculty-name"><i class="fas fa-user"></i> {{ lab.faculty_name }}</span><span class="course-name-small">{{ lab.course_name|truncatechars:20 }}</span><span class="lab-room-tag">{{ lab.lab_room }}</span></div>{% endif %}{% endfor %}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Footer with Faculty and Course Lists -->
+                    <div class="lab-report-footer">
+                        <div class="lab-courses-list">
+                            <i class="fas fa-chalkboard-user"></i> <strong>Faculty Members:</strong>
+                            <div class="faculty-list">
+                                {% for faculty_name in report.all_faculty %}
+                                    <span class="faculty-tag">
+                                        <i class="fas fa-user-graduate"></i> {{ faculty_name }}
+                                    </span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="lab-courses-list">
+                            <i class="fas fa-book"></i> <strong>Lab Courses:</strong>
+                            {% for faculty_name, courses in report.faculty_details.items %}
+                                {% for course in courses %}
+                                    <span class="lab-course-tag">{{ course.code }}</span>
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
         {% else %}
         <!-- No Data Message -->
         <div class="no-data">
@@ -1035,6 +1409,8 @@
                 .lunch-cell { background: #fff3cd; color: #856404; }
                 .free-cell { color: #999; font-style: italic; }
                 .footer { margin-top: 40px; text-align: center; font-size: 10px; color: #999; padding-top: 20px; border-top: 1px solid #eee; }
+                .lab-session { margin: 5px 0; padding: 5px; background: #e8f4f8; border-radius: 5px; }
+                .faculty-name { color: #0066cc; font-weight: bold; display: block; }
                 @media print { body { padding: 20px; } }
             </style>
         </head>
@@ -1049,7 +1425,7 @@
                     </div>
                 </div>`;
         
-        // Add timetables
+        // Add main timetables
         const timetableSections = document.querySelectorAll('.timetable-section');
         timetableSections.forEach((section, index) => {
             const title = section.querySelector('.timetable-title')?.innerText || `Timetable ${index + 1}`;
@@ -1072,6 +1448,20 @@
                 html += `
                 <div class="timetable-section">
                     <div class="section-title">${escapeHtml(name)}</div>
+                    ${table.outerHTML}
+                </div>`;
+            }
+        });
+        
+        // Add lab reports
+        const labReportCards = document.querySelectorAll('.lab-report-card');
+        labReportCards.forEach((card) => {
+            const title = card.querySelector('.lab-report-title h3')?.innerText || 'Lab Report';
+            const table = card.querySelector('.lab-report-table');
+            if (table) {
+                html += `
+                <div class="timetable-section">
+                    <div class="section-title">📋 ${escapeHtml(title)}</div>
                     ${table.outerHTML}
                 </div>`;
             }
